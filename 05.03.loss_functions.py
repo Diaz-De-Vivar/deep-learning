@@ -33,7 +33,7 @@ def categorical_cross_entropy_torch(y_true, y_pred):
     return torch.mean(loss)
 
 # Categorical cross-entropy loss function
-def categorical_cross_entropy_torch_numpy(y_pred, y_true, epsilon = 1e-15):
+def categorical_cross_entropy_numpy(y_pred, y_true, epsilon = 1e-15):
     """
     Categorical cross-entropy loss function.
     Args:
