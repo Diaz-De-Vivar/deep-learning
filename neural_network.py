@@ -1,6 +1,29 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+class Layer_Dense:
+    def __init__(self, n_inputs, n_neurons, activation=None):
+        """
+        Initialize weights, biases, and activation function for the layer.
+        :param n_inputs: Number of inputs to the layer
+        :param n_neurons: Number of neurons in the layer
+        :param activation: Activation function (e.g., relu, sigmoid, tanh, softmax)
+        """
+        if n_inputs <= 0 or n_neurons <= 0:
+            raise ValueError("Number of inputs and neurons must be positive")
+            
+        self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)
+        self.biases = np.zeros((1, n_neurons))
+        self.activation = activation
+
+    def forward_prop(self, inputs):
+        """
+        Perform the forward pass for the layer.
+        :param inputs: Input data
+        """
+        self.output_raw = inputs @ self.weights + self.biases
+        self.output = self.activation(self.output_raw) if self.activation else self.output_raw
+
 def init_params(layer_dims):
     np.random.seed(3)
     params = {}
@@ -109,4 +132,4 @@ if __name__ == "__main__":
     Y_hat, _ = forward_prop(X, params)
     predictions = (Y_hat > 0.5).astype(int)
     accuracy = np.mean(predictions == Y)
-    print(f"Training accuracy: {accuracy * 100:.2f}%") 
+    print(f"Training accuracy: {accuracy * 100:.2f}%")
