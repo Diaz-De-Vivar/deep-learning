@@ -56,24 +56,24 @@ class Layer_DenseTorch:
         self.output_raw = inputs @ self.weights + self.biases
         self.output = self.activation(self.output_raw) if self.activation else self.output_raw
 
-# Define activation functions as a dictionary for better modularity
-# CPU (numpy)
-activation_functions = {
-    "linear": lambda x: x,
-    "relu": lambda x: np.maximum(0, x),
-    "sigmoid": lambda x: 1 / (1 + np.exp(-x)),
-    "tanh": lambda x: np.tanh(x),
-    "softmax": lambda x: np.exp(x - np.max(x, axis=1, keepdims=True)) / np.sum(np.exp(x - np.max(x, axis=1, keepdims=True)), axis=1, keepdims=True)
-}
-
-# GPU (PyTorch)
-activation_functions_torch = {
-    "linear": lambda x: x,
-    "relu": lambda x: F.relu(x),
-    "sigmoid": lambda x: torch.sigmoid(x),
-    "tanh": lambda x: torch.tanh(x),
-    "softmax": lambda x: F.softmax(x, dim=1)
-}
+class ActivationFunctions:
+    def __init__(self, backend='numpy'):
+        if backend == 'numpy':
+                self.backend = 'numpy'
+                self.linear = lambda x: x
+                self.relu = lambda x: np.maximum(0, x)
+                self.sigmoid = lambda x: 1 / (1 + np.exp(-x))
+                self.tanh = lambda x: np.tanh(x)
+                self.softmax = lambda x: np.exp(x - np.max(x, axis=1, keepdims=True)) / np.sum(np.exp(x - np.max(x, axis=1, keepdims=True)), axis=1, keepdims=True)
+        elif backend == 'torch':
+                self.backend = 'torch'
+                self.linear = lambda x: x
+                self.relu = lambda x: F.relu(x)
+                self.sigmoid = lambda x: torch.sigmoid(x)
+                self.tanh = lambda x: torch.tanh(x)
+                self.softmax = lambda x: F.softmax(x, dim=1)
+        else:
+            raise ValueError("Unsupported backend. Use 'numpy' or 'torch'.")
 
 # Loss Functions
 # CPU (numpy) GPU (PyTorch)
