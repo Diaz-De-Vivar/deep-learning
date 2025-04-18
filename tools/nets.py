@@ -91,8 +91,16 @@ class TorchBackend(Backend):
     # Loss function
     def categorical_cross_entropy(self, y_pred, y_true, epsilon=1e-15):
         y_pred_clamped = torch.clamp(y_pred, epsilon, 1 - epsilon)
-        loss = -torch.sum(y_true * torch.log(y_pred_clamped), dim=1)
-        return torch.mean(loss)
+        
+        # Check if y_true is one-hot encoded or sparse
+        if y_true.ndim == 1:  # Sparse labels
+            loss = -torch.log(y_pred_clamped[torch.arange(len(y_pred_clamped)), y_true.long()])
+        # elif y_true.ndim == 2:  # One-hot encoded labels
+            # loss = -torch.sum(y_true * torch.log(y_pred_clamped), dim=1)
+        else:  # One-hot encoded labels
+            loss = -torch.sum(y_true * torch.log(y_pred_clamped), dim=1)
+        
+        return torch.mean(loss, dtype=torch.float32)
 
 class Layer_Dense:
     """Dense (fully connected) neural network layer"""

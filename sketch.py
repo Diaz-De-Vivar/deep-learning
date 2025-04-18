@@ -51,6 +51,8 @@ class txtb_Loss_CategoricalCrossentropy(txtb_Loss):
         # Clip both sides to not drag mean towards any value
         y_pred_clipped = np.clip(y_pred, 1e-7, 1 - 1e-7)
 
+
+        # Calculate categorical cross-entropy loss without explicitly creating one-hot encoded vectors for your true labels. This is often referred to as using sparse categorical cross-entropy
         # Probabilities for target values -
         # only if categorical labels
         if len(y_true.shape) == 1:
