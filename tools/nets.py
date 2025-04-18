@@ -1,116 +1,135 @@
-import os
 import numpy as np
-import matplotlib.pyplot as plt
-from nnfs.datasets import spiral_data, vertical_data
-import numpy as np
-import nnfs
-import time
 import torch
 import torch.nn.functional as F
+import nnfs
+from nnfs.datasets import spiral_data, vertical_data
 
+# Set seeds for reproducibility
 np.random.seed(42)
 nnfs.init()
 
-# Updated Layer_Dense class with activation function support
-class Layer_DenseNumpy:
-    def __init__(self, n_inputs, n_neurons, activation=None):
+class Backend:
+    """Base class for different computation backends"""
+    @staticmethod
+    def get_backend(name):
+        backends = {
+            'numpy': NumPyBackend,
+            'torch': TorchBackend
+        }
+        if name not in backends:
+            raise ValueError(f"Unsupported backend '{name}'. Use one of: {list(backends.keys())}")
+        return backends[name]()
+
+class NumPyBackend(Backend):
+    """NumPy implementation of computation backend"""
+    def __init__(self):
+        self.name = 'numpy'
+        self.device = None
+
+    def initialize_weights(self, n_inputs, n_neurons):
+        return 0.01 * np.random.randn(n_inputs, n_neurons)
+
+    def initialize_biases(self, n_neurons):
+        return np.zeros((1, n_neurons))
+
+    def forward(self, inputs, weights, biases):
+        return inputs @ weights + biases
+
+    # Activation functions
+    def linear(self, x):
+        return x
+
+    def relu(self, x):
+        return np.maximum(0, x)
+
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+
+    def tanh(self, x):
+        return np.tanh(x)
+
+    def softmax(self, x):
+        exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=1, keepdims=True)
+
+    # Loss function
+    def categorical_cross_entropy(self, y_pred, y_true, epsilon=1e-15):
+        y_pred_clipped = np.clip(y_pred, epsilon, 1 - epsilon)
+        return -np.sum(y_true * np.log(y_pred_clipped), axis=1, keepdims=True)
+
+class TorchBackend(Backend):
+    """PyTorch implementation of computation backend"""
+    def __init__(self):
+        self.name = 'torch'
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    def initialize_weights(self, n_inputs, n_neurons):
+        return 0.01 * torch.randn(n_inputs, n_neurons, device=self.device)
+
+    def initialize_biases(self, n_neurons):
+        return torch.zeros(1, n_neurons, device=self.device)
+
+    def forward(self, inputs, weights, biases):
+        return inputs @ weights + biases
+
+    # Activation functions
+    def linear(self, x):
+        return x
+
+    def relu(self, x):
+        return F.relu(x)
+
+    def sigmoid(self, x):
+        return torch.sigmoid(x)
+
+    def tanh(self, x):
+        return torch.tanh(x)
+
+    def softmax(self, x):
+        return F.softmax(x, dim=1)
+
+    # Loss function
+    def categorical_cross_entropy(self, y_pred, y_true, epsilon=1e-15):
+        y_pred = torch.clamp(y_pred, epsilon, 1 - epsilon)
+        loss = -torch.sum(y_true * torch.log(y_pred), dim=1)
+        return torch.mean(loss)
+
+class Layer_Dense:
+    """Dense (fully connected) neural network layer"""
+    def __init__(self, n_inputs, n_neurons, activation=None, backend='numpy'):
         """
         Initialize weights, biases, and activation function for the layer.
-        :param n_inputs: Number of inputs to the layer
-        :param n_neurons: Number of neurons in the layer
-        :param activation: Activation function (e.g., relu, sigmoid, tanh, softmax)
-        """
-        # NumPy version
-        self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)
-        self.biases = np.zeros((1, n_neurons))
-        self.activation = activation
 
-    def forward_prop(self, inputs):
+        Args:
+            n_inputs: Number of inputs to the layer
+            n_neurons: Number of neurons in the layer
+            activation: Activation function name (e.g., 'relu', 'sigmoid', 'tanh', 'softmax')
+            backend: Computation backend ('numpy' or 'torch')
         """
-        Perform the forward pass for the layer.
-        :param inputs: Input data
-        """
-        self.output_raw = inputs @ self.weights + self.biases
-        self.output = self.activation(self.output_raw) if self.activation else self.output_raw
+        self.backend = Backend.get_backend(backend)
+        self.weights = self.backend.initialize_weights(n_inputs, n_neurons)
+        self.biases = self.backend.initialize_biases(n_neurons)
 
-class Layer_DenseTorch:
-    def __init__(self, n_inputs, n_neurons, activation=None):
-        """
-        Initialize weights, biases, and activation function for the layer.
-        :param n_inputs: Number of inputs to the layer
-        :param n_neurons: Number of neurons in the layer
-        :param activation: Activation function (e.g., relu, sigmoid, tanh, softmax)
-        """
-        # PyTorch version
-        # Check if CUDA is available and set device accordingly
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.weights = 0.01 * torch.randn(n_inputs, n_neurons, device=device)
-        self.biases = torch.zeros(1, n_neurons, device=device)
-        self.activation = activation
-
-    def forward_prop(self, inputs):
-        """
-        Perform the forward pass for the layer.
-        :param inputs: Input data
-        """
-        self.output_raw = inputs @ self.weights + self.biases
-        self.output = self.activation(self.output_raw) if self.activation else self.output_raw
-
-class ActivationFunctions:
-    def __init__(self, backend='numpy'):
-        if backend == 'numpy':
-                self.backend = 'numpy'
-                self.linear = lambda x: x
-                self.relu = lambda x: np.maximum(0, x)
-                self.sigmoid = lambda x: 1 / (1 + np.exp(-x))
-                self.tanh = lambda x: np.tanh(x)
-                self.softmax = lambda x: np.exp(x - np.max(x, axis=1, keepdims=True)) / np.sum(np.exp(x - np.max(x, axis=1, keepdims=True)), axis=1, keepdims=True)
-        elif backend == 'torch':
-                self.backend = 'torch'
-                self.linear = lambda x: x
-                self.relu = lambda x: F.relu(x)
-                self.sigmoid = lambda x: torch.sigmoid(x)
-                self.tanh = lambda x: torch.tanh(x)
-                self.softmax = lambda x: F.softmax(x, dim=1)
+        # Set activation function
+        if activation is None:
+            self.activation = self.backend.linear
         else:
-            raise ValueError("Unsupported backend. Use 'numpy' or 'torch'.")
+            self.activation = getattr(self.backend, activation.lower())
 
-# Loss Functions
-# CPU (numpy) GPU (PyTorch)
+    def forward(self, inputs):
+        """
+        Perform the forward pass for the layer.
 
-def categorical_cross_entropy_torch(y_true, y_pred):
-    """
-    Calculate categorical cross-entropy loss
-    
-    Args:
-        y_true: Ground truth probabilities or one-hot encoded labels
-        y_pred: Predicted probabilities from softmax
-        
-    Returns:
-        Loss value
-    """
-    # Ensure numerical stability by adding a small epsilon to prevent log(0)
-    epsilon = 1e-15
-    y_pred = torch.clamp(y_pred, epsilon, 1 - epsilon)
-    
-    # Calculate cross-entropy loss
-    loss = -torch.sum(y_true * torch.log(y_pred), dim=1)
-    
-    # Return mean loss across all samples
-    return torch.mean(loss)
+        Args:
+            inputs: Input data
 
-# Categorical cross-entropy loss function
-def categorical_cross_entropy_numpy(y_pred, y_true, epsilon = 1e-15):
-    """
-    Categorical cross-entropy loss function.
-    Args:
-        y_pred (np.ndarray): Predicted probabilities (batch_size, num_classes).
-        y_true (np.ndarray): True labels (batch_size, num_classes).
-        epsilon (float): Small value to prevent log(0).
-    Returns:
-        np.ndarray: Loss value for each sample in the batch.
-    """   
-    # Clip predictions to prevent log(0)
-    y_pred_clipped = np.clip(y_pred, epsilon, 1 - epsilon)
-    # Calculate loss
-    return -np.sum(y_true * np.log(y_pred_clipped), axis=1, keepdims=True)
+        Returns:
+            Layer output after activation
+        """
+        self.output_raw = self.backend.forward(inputs, self.weights, self.biases)
+        self.output = self.activation(self.output_raw)
+        return self.output
+
+# Example usage:
+# numpy_layer = Layer_Dense(2, 64, activation='relu', backend='numpy')
+# torch_layer = Layer_Dense(2, 64, activation='relu', backend='torch')
