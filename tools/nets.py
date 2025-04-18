@@ -90,8 +90,8 @@ class TorchBackend(Backend):
 
     # Loss function
     def categorical_cross_entropy(self, y_pred, y_true, epsilon=1e-15):
-        y_pred = torch.clamp(y_pred, epsilon, 1 - epsilon)
-        loss = -torch.sum(y_true * torch.log(y_pred), dim=1)
+        y_pred_clamped = torch.clamp(y_pred, epsilon, 1 - epsilon)
+        loss = -torch.sum(y_true * torch.log(y_pred_clamped), dim=1)
         return torch.mean(loss)
 
 class Layer_Dense:
