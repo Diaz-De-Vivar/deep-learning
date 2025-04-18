@@ -1,15 +1,4 @@
-import os
 import numpy as np
-import matplotlib.pyplot as plt
-from nnfs.datasets import spiral_data
-import numpy as np
-import nnfs
-import time
-import torch
-import torch.nn.functional as F
-
-np.random.seed(42)
-nnfs.init()
 
 # Dense layer
 class txtb_Layer_Dense:
