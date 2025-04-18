@@ -1,3 +1,5 @@
+## Torch reproducibility parameters
+
 1.  **`torch.backends.cudnn.deterministic = True`**
     *   **What it does:** This setting forces PyTorch to only use cuDNN algorithms that are deterministic. Some cuDNN operations (like certain convolution algorithms) can be non-deterministic, meaning they might produce slightly different results on the same input data across different runs, even on the same hardware. This non-determinism often arises from the order of floating-point operations, especially in parallel computations.
     *   **Why use it:** The primary reason is **reproducibility**. If you need your model training or evaluation to be *exactly* repeatable (bitwise identical results) across runs, setting this to `True` is often necessary. This is crucial for debugging, comparing model variations precisely, or meeting strict scientific standards.
