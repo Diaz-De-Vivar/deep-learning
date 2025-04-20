@@ -1,1 +1,1 @@
-﻿# Neural Networks from Scratch (NNFS)
+﻿# Deep Learning. Research on Neural Nets
