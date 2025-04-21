@@ -5,8 +5,8 @@ import torch.nn.functional as F
 # Set seeds for reproducibility
 np.random.seed(42)
 torch.manual_seed(42)
-torch.backends.cudnn.deterministic = True # For reproducibility
-torch.backends.cudnn.benchmark = False # Benchmarking disabled for reproducibility
+# torch.backends.cudnn.deterministic = True # For reproducibility
+# torch.backends.cudnn.benchmark = False # Benchmarking disabled for reproducibility
 torch.cuda.manual_seed(42) # Set seed for GPU if available
 # torch.cuda.manual_seed_all(SEED) # lol someday
 # torch.backends.cudnn.enabled = False # Disable cuDNN for reproducibility
