@@ -1,0 +1,2373 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \makeatletter
+    \newsavebox\pandoc@box
+    \newcommand*\pandocbounded[1]{%
+      \sbox\pandoc@box{#1}%
+      % scaling factors for width and height
+      \Gscale@div\@tempa\textheight{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+      \Gscale@div\@tempb\linewidth{\wd\pandoc@box}%
+      % select the smaller of both
+      \ifdim\@tempb\p@<\@tempa\p@
+        \let\@tempa\@tempb
+      \fi
+      % scaling accordingly (\@tempa < 1)
+      \ifdim\@tempa\p@<\p@
+        \scalebox{\@tempa}{\usebox\pandoc@box}%
+      % scaling not needed, use as it is
+      \else
+        \usebox{\pandoc@box}%
+      \fi
+    }
+    \makeatother
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{test}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{Bayesian inference of model parameters (binomial
+model)}\label{bayesian-inference-of-model-parameters-binomial-model}
+
+The goal is to find the posterior probability distribution function
+(PDF) of the model parameters \$ \theta \$ given the observed data \$ D
+\$ and a chosen model class \$ M \$ :
+
+\$ p(\theta \textbar{} D, M) =
+\frac{p(D | \theta, M) p(\theta | M)}{p(D | M)} \$
+
+Where: * \$ p(\theta \textbar{} D, M) \$ : \textbf{Posterior PDF} - Our
+updated belief about \$ \theta \$ after seeing the data \$ D \$ ,
+assuming model \$ M \$ . * \$ p(D \textbar{} \theta, M) \$ :
+\textbf{Likelihood Function} - The probability (or density) of observing
+data \$ D \$ given specific parameters \$ \theta \$ and model \$ M \$ .
+* \$ p(\theta \textbar{} M) \$ : \textbf{Prior PDF} - Our initial belief
+about \$ \theta \$ before seeing data \$ D \$ , assuming model \$ M \$ .
+* \$ p(D \textbar{} M) \$ : \textbf{Evidence (or Marginal Likelihood)} -
+The probability (or density) of observing data \$ D \$ under model \$ M
+\$ , averaged over all possible \$ \theta \$ . It acts as a
+normalization constant.
+
+\textbf{Example: Estimating Coin Bias}
+
+Let's use a simple example: estimating the bias \$ \theta \$
+(probability of heads) of a coin based on observed flips.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Model \$ M \$ }: The Binomial/Bernoulli model. We assume the
+  coin flips are independent Bernoulli trials with a fixed (but unknown)
+  probability of heads \$ \theta \$ .
+\item
+  \textbf{Parameters \$ \theta \$ }: A single parameter, \$
+  \theta \in [0, 1] \$ , representing the probability of getting heads.
+\item
+  \textbf{Data \$ D \$ }: A sequence of coin flips. Let's say we flipped
+  the coin \$ n=10 \$ times and observed \$ k=7 \$ heads. So, \$ D =
+  \{n=10, k=7\} \$ .
+\end{itemize}
+
+Now let's provide Python examples for each term.
+
+    Libraries import
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{beta}\PY{p}{,} \PY{n}{binom}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{beta} \PY{k}{as} \PY{n}{beta\PYZus{}function} \PY{c+c1}{\PYZsh{} The Beta function B(a,b)}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Bernoulli experiment setup
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Example Setup \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Data D: Number of trials (n) and number of successes/heads (k)}
+\PY{n}{n\PYZus{}trials} \PY{o}{=} \PY{l+m+mi}{10}
+\PY{n}{n\PYZus{}heads} \PY{o}{=} \PY{l+m+mi}{7}
+\PY{n}{data\PYZus{}D} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{n\PYZus{}trials}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{n\PYZus{}heads}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Parameters}
+
+  \begin{enumerate}
+  \def\labelenumii{\arabic{enumii}.}
+  \item
+    \textbf{\texttt{theta}}: In the context of this Bayesian inference
+    example (estimating coin bias), \texttt{theta} (\$ \theta \$ )
+    represents the \textbf{parameter we are trying to estimate}.
+    Specifically, it's the unknown probability of the coin landing
+    heads. The possible values for a probability like this range from 0
+    (impossible to get heads) to 1 (guaranteed to get heads).
+  \item
+    \textbf{\texttt{np.linspace()}}: This is a function from the NumPy
+    library (\texttt{np}). Its purpose is to create an array of
+    \textbf{evenly spaced numbers} over a specified interval.
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The first argument (\texttt{0}) is the \textbf{starting value} of
+      the sequence.
+    \item
+      The second argument (\texttt{1}) is the \textbf{ending value} of
+      the sequence.
+    \item
+      The third argument (\texttt{500}) is the \textbf{number of
+      samples} (points) to generate within that interval
+      \texttt{{[}0,\ 1{]}}.
+    \end{itemize}
+  \item
+    \textbf{\texttt{theta\_range}}: Therefore, this variable
+    \texttt{theta\_range} now holds a NumPy array containing 500
+    distinct values, starting at 0.0, ending at 1.0, and spaced equally
+    apart.
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Example values in \texttt{theta\_range} would look something like:
+      \texttt{{[}0.0,\ 0.002004...,\ 0.004008...,\ ...,\ 0.99799...,\ 1.0{]}}
+    \end{itemize}
+  \end{enumerate}
+\item
+  \textbf{Why is this needed?}
+
+  In Bayesian inference, we are interested in probability distributions
+  (like the Prior PDF, Likelihood, and Posterior PDF) defined over the
+  possible range of the parameter \$ \theta \$ .
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Plotting:} To visualize these distributions (e.g., plotting
+    the prior belief about \$ \theta \$ , or the final posterior
+    distribution), we need to calculate the value of the PDF (or
+    likelihood) at many different \$ \theta \$ values across its valid
+    range {[}0, 1{]}. \texttt{theta\_range} provides these x-axis
+    values. Using 500 points helps create smooth-looking curves when
+    plotted.
+  \item
+    \textbf{Numerical Integration (Potentially):} While not explicitly
+    used for integration \emph{in this specific snippet}, if we needed
+    to calculate quantities like the evidence \$ p(D\textbar M) \$
+    numerically (instead of using an analytical formula), we would
+    integrate the product of the likelihood and prior over the range of
+    \$ \theta \$ . \texttt{theta\_range} could serve as the points for
+    numerical integration methods (like the trapezoidal rule, although
+    \texttt{scipy.integrate.quad} is often better).
+  \end{itemize}
+
+  In short, \texttt{theta\_range} creates a fine grid of possible values
+  for the coin's bias \$ \theta \$ between 0 and 1, primarily so we can
+  calculate and plot the shapes of the probability distributions
+  involved in the Bayesian analysis.
+\item
+  \textbf{Is \texttt{theta\_range} all the possible values we could
+  estimate?}
+
+  \textbf{No, not exactly.}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The \emph{true} parameter \$ \theta \$ (the coin's bias) can
+    theoretically be \emph{any} real number between 0 and 1, inclusive.
+    This is a continuous interval containing infinite possible values.
+  \item
+    \texttt{theta\_range\ =\ np.linspace(0,\ 1,\ 500)} creates a
+    \textbf{discrete grid} or \textbf{sampling} of 500 specific points
+    \emph{within} that continuous interval {[}0, 1{]}. These points are
+    evenly spaced.
+  \item
+    The purpose of \texttt{theta\_range} is \textbf{not} to list
+    \emph{every} possibility, but to provide a sufficiently dense set of
+    points \textbf{across the range} of possibilities. We use these
+    points primarily for:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textbf{Calculating:} Evaluating the Prior PDF, Likelihood
+      function, and Posterior PDF at these specific points.
+    \item
+      \textbf{Plotting:} Using these calculated values to draw smooth
+      curves representing the distributions. The more points, the
+      smoother the curve appears.
+    \item
+      \textbf{Numerical Approximation (Sometimes):} If analytical
+      solutions weren't available, we might use these points for
+      numerical integration (like calculating the evidence \$
+      p(D\textbar M) \$ using methods like the trapezoidal rule).
+    \end{itemize}
+  \end{itemize}
+
+  Think of it like pixels on a screen: the screen uses a finite number
+  of pixels to represent a potentially continuous image.
+  \texttt{theta\_range} is like the set of x-coordinates for the
+  ``pixels'' we use to draw our probability distributions. The actual
+  distributions (prior, posterior) are conceptually defined over the
+  continuous {[}0, 1{]} range.
+\item
+  \textbf{Is it better to increase \texttt{theta\_range} (i.e., increase
+  the number of points, like from 500 to 1000 or more)?}
+
+  \textbf{It depends on the goal, but often 500 is sufficient for
+  visualization:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Advantage of Increasing:}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textbf{Smoother Plots:} More points lead to a visually smoother
+      representation of the probability density curves, especially if
+      the curve has sharp peaks or changes quickly.
+    \item
+      \textbf{Better Numerical Integration (if using grid-based
+      methods):} If you were approximating an integral using these
+      points directly (e.g., trapezoidal rule), more points generally
+      yield a more accurate result.
+    \end{itemize}
+  \item
+    \textbf{Disadvantage of Increasing:}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textbf{More Computation:} Calculating the likelihood and PDFs at
+      1000 points takes roughly twice as long as calculating them at 500
+      points. For simple models this is trivial, but for complex models
+      where each likelihood evaluation is expensive, this matters.
+    \item
+      \textbf{More Memory:} Storing the \texttt{theta\_range} array and
+      the corresponding PDF/likelihood values takes more memory.
+      (Usually not a major concern for 1D problems).
+    \item
+      \textbf{Diminishing Returns:} Going from 50 points to 500 makes a
+      big visual difference. Going from 500 to 5000 might make the curve
+      look negligibly smoother for most typical distributions, while
+      significantly increasing computation.
+    \end{itemize}
+  \end{itemize}
+
+  \textbf{Conclusion:} For the purpose of \emph{visualizing} relatively
+  well-behaved 1D distributions like the Beta or Gaussian PDFs in these
+  examples, 200-500 points is usually perfectly adequate to get a good
+  sense of the shape. Increasing it much further rarely adds significant
+  visual insight and increases computation unnecessarily. If you needed
+  highly accurate \emph{numerical integration}, you might increase the
+  number of points, but often using dedicated integration functions
+  (like \texttt{scipy.integrate.quad}) that adaptively choose evaluation
+  points is more efficient than just using a denser fixed grid.
+\end{enumerate}
+
+So, \texttt{theta\_range} is a practical tool for working with
+continuous distributions on a computer, providing a grid for calculation
+and plotting. 500 points is a reasonable choice for good visualization
+without excessive computation in this context.
+
+    \subsection{\texorpdfstring{1. Prior PDF: \$ p(\theta \textbar{} M)
+\$}{1. Prior PDF: \$ p(\textbar{} M) \$}}\label{prior-pdf-p-m}
+
+This represents our belief about the coin's bias \$ \theta \$
+\emph{before} we see any flips. A common choice is a Beta distribution,
+\$ \text{Beta}(\alpha, \beta) \$ , because it's defined on \$ {[}0, 1{]}
+\$ and is the conjugate prior for the Binomial likelihood. Let's choose
+an uninformative prior, like \$ \text{Beta}(1, 1) \$ , which is
+equivalent to a Uniform distribution on \$ {[}0, 1{]} \$ .
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: Initially, we believe all values of \$ \theta \$
+  between 0 and 1 are equally likely.
+\item
+  \textbf{Mathematical Form}: \$ p(\theta \textbar{} M) =
+  \text{Beta}(\theta \textbar{} \alpha\_0, \beta\_0) \$ . Here, \$
+  \alpha\_0 = 1, \beta\_0 = 1 \$ . \$ p(\theta \textbar{} M) =
+  \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}
+  \theta\^{}\{\alpha\_0-1\} (1-\theta)\^{}\{\beta\_0-1\}\$
+\end{itemize}
+
+    \$ p(\theta \textbar{} M) = 1\$ si \$ \alpha\_0 = 1, \beta\_0 = 1 \$ .
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} A specific parameter value we might evaluate things at}
+\PY{n}{theta\PYZus{}example} \PY{o}{=} \PY{l+m+mf}{0.6}
+\PY{c+c1}{\PYZsh{} A range of theta values for potential plotting or integration}
+\PY{n}{theta\PYZus{}range} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{500}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Model M implicitly assumes Bernoulli trials \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Model M is represented here by the choice of prior and likelihood functions}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Term 1: Prior PDF p(θ|M) \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 1. Prior PDF p(θ|M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Set up the plot parameters}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplots\PYZus{}adjust}\PY{p}{(}\PY{n}{hspace}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 1. Plot Prior (using Beta(1,1) which is uniform)}
+\PY{n}{prior} \PY{o}{=} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{a}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior: Beta(1,1)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior Distribution p(θ|M)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 2. Plot Likelihood}
+\PY{n}{likelihood} \PY{o}{=} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{likelihood}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood: Binom(}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood Function p(D|θ,M)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 3. Plot Posterior (using Beta(k+1,n\PYZhy{}k+1))}
+\PY{n}{posterior} \PY{o}{=} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{a}\PY{o}{=}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{b}\PY{o}{=}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{posterior}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior: Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior Distribution p(θ|D,M)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+--- 1. Prior PDF p(θ|M) ---
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_9_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Term 2: Likelihood p(D|θ,M) \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} print(\PYZdq{}\PYZhy{}\PYZhy{}\PYZhy{} 2. Likelihood p(D|θ,M) \PYZhy{}\PYZhy{}\PYZhy{}\PYZdq{})}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \textbf{1. What the Expression Represents: The Beta Distribution}
+
+\$ p(\theta \textbar{} M) =
+\frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}
+\theta\^{}\{\alpha\_0-1\} (1-\theta)\^{}\{\beta\_0-1\} \$ is the
+\textbf{Probability Density Function (PDF)} of the \textbf{Beta
+distribution}.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\$ p(\theta \textbar{} M)\$ }: This notation often appears in
+  Bayesian statistics.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \$ \theta\$ (theta) is a parameter we are interested in. Because its
+    domain is specified as \$ \theta \in [0, 1]\$ , it typically
+    represents a probability or a proportion (e.g., the probability of
+    success in a Bernoulli trial, like the bias of a coin).
+  \item
+    \$ M\$ represents the ``Model'' or prior information/assumptions.
+  \item
+    \$ p(\theta \textbar{} M)\$ reads as ``the probability density of \$
+    \theta\$ given the model M''. In a Bayesian context, this specific
+    form often represents the \textbf{prior distribution} for the
+    parameter \$ \theta\$ . It encodes our beliefs about \$ \theta\$
+    \emph{before} observing any data.
+  \end{itemize}
+\item
+  **\$ \alpha\_0, \beta\_0\$ \textbf{: These are the }parameters** (or
+  \textbf{hyperparameters} in a Bayesian context) of the Beta
+  distribution. They must be positive (\$ \alpha\_0 \textgreater{} 0,
+  \beta\_0 \textgreater{} 0\$ ). They control the \emph{shape} of the
+  distribution, reflecting different prior beliefs about \$ \theta\$ .
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \$ \alpha\_0 = \beta\_0\$ , the distribution is symmetric around
+    \$ \theta = 0.5\$ .
+  \item
+    If \$ \alpha\_0 \textgreater{} \beta\_0\$ , the distribution is
+    skewed towards 1.
+  \item
+    If \$ \alpha\_0 \textless{} \beta\_0\$ , the distribution is skewed
+    towards 0.
+  \item
+    Larger values of \$ \alpha\_0\$ and \$ \beta\_0\$ make the
+    distribution more peaked (representing stronger prior beliefs).
+  \end{itemize}
+\item
+  **\$ \theta\^{}\{\alpha\_0-1\} (1-\theta)\^{}\{\beta\_0-1\}\$ **: This
+  part defines the basic shape of the distribution over the interval \$
+  \theta \in [0, 1]\$ .
+\item
+  \textbf{\$ \Gamma(\cdot)\$ }: This is the \textbf{Gamma function}, a
+  generalization of the factorial function to real numbers (where \$
+  \Gamma(n) = (n-1)!\$ for positive integers \$ n\$ ).
+\item
+  \textbf{\$
+  \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}\$
+  }: This is the \textbf{normalizing constant}. Its purpose is to ensure
+  that the total area under the curve of the PDF, when integrated over
+  the entire domain of \$ \theta\$ (which is {[}0, 1{]}), equals exactly
+  1. This is a fundamental requirement for any probability density
+  function.
+\end{itemize}
+
+\textbf{2. The Claim: ``\$ = 1\$ for \$ \theta \in [0, 1] \$'' - Is it
+True?}
+
+\textbf{No, the statement that this PDF is equal to 1 for \emph{all} \$
+\theta \in [0, 1]\$ is generally incorrect.}
+
+The PDF \$ p(\theta \textbar{} M)\$ gives the \emph{relative likelihood}
+of different values of \$ \theta\$ . It is a function of \$ \theta\$ ,
+and its value changes as \$ \theta\$ changes (unless \$ \alpha\_0=1\$
+and \$ \beta\_0=1\$ ).
+
+\textbf{The Special Case: Beta(1, 1) - The Uniform Distribution}
+
+There is one specific case where the PDF \emph{is} equal to 1 over the
+interval {[}0, 1{]}: when \$ \alpha\_0 = 1\$ and \$ \beta\_0 = 1\$ .
+Let's plug these values in:
+
+\$ p(\theta \textbar{} M) = \frac{\Gamma(1 + 1)}{\Gamma(1)\Gamma(1)}
+\theta\^{}\{1-1\} (1-\theta)\^{}\{1-1\} \$ \$ p(\theta \textbar{} M) =
+\frac{\Gamma(2)}{\Gamma(1)\Gamma(1)} \theta\^{}\{0\} (1-\theta)\^{}\{0\}
+\$
+
+Since \$ \Gamma(2) = 1! = 1\$ and \$ \Gamma(1) = 0! = 1\$ , and anything
+to the power of 0 is 1:
+
+\$ p(\theta \textbar{} M) = \frac{1}{1 \cdot 1} \cdot 1 \cdot 1 = 1 \$
+
+So, for \$ \alpha\_0 = 1\$ and \$ \beta\_0 = 1\$ , the Beta distribution
+becomes \$ p(\theta \textbar{} M) = 1\$ for \$ \theta \in [0, 1]\$ .
+This is the \textbf{Uniform distribution} on {[}0, 1{]}, often written
+as \$ U(0, 1)\$ . This specific prior represents a state of ``maximum
+ignorance'' or indifference, where all values of \$ \theta\$ between 0
+and 1 are considered equally likely \emph{a priori}.
+
+\textbf{3. What \emph{is} True for all Beta distributions? The Integral
+is 1}
+
+While the PDF itself is not generally equal to 1, the \textbf{integral}
+of the PDF over its entire domain \emph{must} equal 1:
+
+\$ \int\_0\^{}1 p(\theta \textbar{} M) d\theta = \int\_0\^{}1
+\frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}
+\theta\^{}\{\alpha\_0-1\} (1-\theta)\^{}\{\beta\_0-1\} d\theta = 1 \$
+
+This is true for \emph{any} valid parameters \$ \alpha\_0 \textgreater{}
+0\$ and \$ \beta\_0 \textgreater{} 0\$ . The normalizing constant \$
+\frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}\$ is
+specifically calculated to make this integral equal to 1. (This constant
+is the reciprocal of the Beta function, \$ B(\alpha\_0, \beta\_0)\$ ).
+
+\textbf{In Summary:}
+
+\begin{itemize}
+\tightlist
+\item
+  The expression is the PDF of the Beta(\$ \alpha\_0, \beta\_0\$ )
+  distribution, commonly used as a prior for parameters \$ \theta\$ that
+  lie between 0 and 1.
+\item
+  The statement that the PDF equals 1 for all \$ \theta \in [0, 1]\$ is
+  \textbf{only true for the specific case} where \$ \alpha\_0 = 1\$ and
+  \$ \beta\_0 = 1\$ , which corresponds to the Uniform(0, 1)
+  distribution.
+\item
+  For any other valid \$ \alpha\_0, \beta\_0\$ , the PDF value will vary
+  with \$ \theta\$ .
+\item
+  What is always true is that the \textbf{total area under the PDF
+  curve}, i.e., the integral from 0 to 1, is equal to 1. This signifies
+  that the total probability over all possible values of \$ \theta\$ is
+  1.
+\end{itemize}
+
+    \subsection{\texorpdfstring{2. Likelihood Function: \$ p(D \textbar{}
+\theta, M)
+\$}{2. Likelihood Function: \$ p(D \textbar{} , M) \$}}\label{likelihood-function-pd-m}
+
+This function describes the probability of observing the data \$ D \$
+(our sequence of coin flips) given a \emph{specific} value of the coin's
+bias \$ \theta \$ . Assuming the flips are independent Bernoulli trials,
+the likelihood of observing \$ H \$ heads and \$ T = N-H \$ tails in \$
+N \$ flips follows a Binomial distribution form.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: It quantifies how well a particular hypothesis \$
+  \theta \$ explains the observed data \$ D \$ . For example, if we
+  observe 9 heads in 10 flips, a \$ \theta \$ value close to 0.9 will
+  have a higher likelihood than a \$ \theta \$ value close to 0.1.
+\item
+  \textbf{Mathematical Form}: Let \$ D \$ be the observation of \$ H \$
+  heads in \$ N \$ flips. \$ p(D \textbar{} \theta, M)
+  \propto \theta\^{}H (1-\theta)\^{}\{N-H\} \$ . (Note: We often drop
+  the binomial coefficient \$ \binom{N}{H} \$ here because it doesn't
+  depend on \$ \theta \$ and will be part of the normalization constant
+  in Bayes' theorem).
+\end{itemize}
+
+    \subsection{\texorpdfstring{2. Likelihood Function: \$ p(D \textbar{}
+\theta, M)
+\$}{2. Likelihood Function: \$ p(D \textbar{} , M) \$}}\label{likelihood-function-pd-m}
+
+This represents the probability of observing our specific data (\$ k=7
+\$ heads in \$ n=10 \$ flips) given a \emph{particular} value of the
+coin's bias \$ \theta \$ . For a fixed \$ D \$ , we view this as a
+function of \$ \theta \$ . The standard function here is the Binomial
+probability mass function (PMF).
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: How well does a specific hypothesis \$ \theta \$
+  explain the observed data \$ D \$ ?
+\item
+  \textbf{Mathematical Form}: \$ p(D \textbar{} \theta, M) =
+  \binom{n}{k} \theta\^{}k (1-\theta)\^{}\{n-k\} \$
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{beta}
+
+\PY{c+c1}{\PYZsh{} Define the range of x values (probabilities from 0 to 1)}
+\PY{c+c1}{\PYZsh{} Avoid exact 0 and 1 for cases where alpha or beta \PYZlt{} 1 (PDF goes to infinity)}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.999}\PY{p}{,} \PY{l+m+mi}{500}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Parameter Pairs to Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{params} \PY{o}{=} \PY{p}{[}
+    \PY{p}{(}\PY{l+m+mi}{9}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}     \PY{c+c1}{\PYZsh{} Skewed towards 1 (belief in heads bias)}
+\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Create the Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{alpha\PYZus{}val}\PY{p}{,} \PY{n}{beta\PYZus{}val} \PY{o+ow}{in} \PY{n}{params}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Calculate the PDF using scipy.stats.beta}
+    \PY{n}{y} \PY{o}{=} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{alpha\PYZus{}val}\PY{p}{,} \PY{n}{beta\PYZus{}val}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Plot the PDF}
+    \PY{n}{line}\PY{p}{,} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Beta(α=}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}val}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, β=}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}val}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mf}{2.5}\PY{p}{)} \PY{c+c1}{\PYZsh{} lw for linewidth}
+
+    \PY{c+c1}{\PYZsh{} Calculate and plot the mean}
+    \PY{n}{mean} \PY{o}{=} \PY{n}{alpha\PYZus{}val} \PY{o}{/} \PY{p}{(}\PY{n}{alpha\PYZus{}val} \PY{o}{+} \PY{n}{beta\PYZus{}val}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{axvline}\PY{p}{(}\PY{n}{mean}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{line}\PY{o}{.}\PY{n}{get\PYZus{}color}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{,}
+                \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mean (α=}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}val}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, β=}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}val}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Add expected value as a text annotation}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{text}\PY{p}{(}\PY{n}{mean}\PY{p}{,} \PY{n+nb}{max}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{0.95}\PY{p}{,} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E[x]=}\PY{l+s+si}{\PYZob{}}\PY{n}{mean}\PY{l+s+si}{:}\PY{l+s+s2}{.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{line}\PY{o}{.}\PY{n}{get\PYZus{}color}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+             \PY{n}{ha}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{va}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{top}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{rotation}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{backgroundcolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{white}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} plt.axvline(mean, color=line.get\PYZus{}color(), linestyle=\PYZsq{}\PYZhy{}\PYZhy{}\PYZsq{}, lw=2, alpha=0.8)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Customize the Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Various Beta Distributions}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x (Probability Value)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability Density p(x | α, β)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Set axis limits \PYZhy{} might need adjustment depending on peak heights}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{n}{bottom}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{top}\PY{o}{=}\PY{n+nb}{max}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{,} \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} Ensure y starts at 0, adjust top if needed}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Show the Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_14_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{\texorpdfstring{3. Posterior PDF: \$ p(\theta \textbar{} D,
+M)
+\$}{3. Posterior PDF: \$ p(\textbar{} D, M) \$}}\label{posterior-pdf-p-d-m}
+
+This represents our updated belief about the coin's bias \$ \theta \$
+\emph{after} observing the data \$ D \$ . It is calculated using Bayes'
+theorem, combining the prior belief and the likelihood.
+
+\$ p(\theta \textbar{} D, M) =
+\frac{p(D | \theta, M) p(\theta | M)}{p(D | M)} \propto p(D \textbar{}
+\theta, M) p(\theta \textbar{} M) \$
+
+This proportionality statement provides a standard way to find the shape
+of the posterior by ignoring the evidence term \$ p(D\textbar M)\$ .
+
+The kernel of the Binomial likelihood \$ p(D \textbar{} \theta, M)\$
+(where D represents H successes in N trials) is identified as \$
+\theta\^{}H (1-\theta)\^{}\{N-H\}\$ .
+
+The kernel of the Beta prior \$ p(\theta \textbar{} M) =
+\text{Beta}(\theta \textbar{} \alpha\_0, \beta\_0)\$ is identified as \$
+\theta\^{}\{\alpha\_0-1\} (1-\theta)\^{}\{\beta\_0-1\}\$ .
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: The posterior distribution synthesizes our initial
+  beliefs with the evidence provided by the data. It represents our
+  state of knowledge about \$ \theta \$ after the experiment.
+\item
+  \textbf{Mathematical Form}: Combining the Beta prior and Binomial
+  likelihood: \$ p(\theta \textbar{} D, M)
+  \propto [\theta^H (1-\theta)^{N-H}] \times [\theta^{\alpha_0-1} (1-\theta)^{\beta_0-1}] \$
+  \$ p(\theta \textbar{} D, M) \propto \theta\^{}\{H + \alpha\_0 - 1\}
+  (1-\theta)\^{}\{N - H + \beta\_0 - 1\} \$ This has the form of a Beta
+  distribution. Therefore, the posterior is: \$ p(\theta \textbar{} D,
+  M) = \text{Beta}(\theta \textbar{} \alpha\_N, \beta\_N) \$ , where the
+  updated parameters are: \$ \alpha\_N = \alpha\_0 + H \$ \$ \beta\_N =
+  \beta\_0 + (N - H) \$ Using our specific prior \$ \alpha\_0 = 1,
+  \beta\_0 = 1 \$ : \$ \alpha\_N = 1 + H \$ \$ \beta\_N = 1 + N - H \$
+  The normalized posterior PDF is: \$ p(\theta \textbar{} D, M) =
+  \frac{\Gamma(\alpha_N + \beta_N)}{\Gamma(\alpha_N)\Gamma(\beta_N)}
+  \theta\^{}\{\alpha\_N-1\} (1-\theta)\^{}\{\beta\_N-1\} \$ \$
+  p(\theta \textbar{} D, M) =
+  \frac{\Gamma(N + 2)}{\Gamma(H + 1)\Gamma(N - H + 1)} \theta\^{}\{H\}
+  (1-\theta)\^{}\{N - H\} \$ for \$ \theta \in [0, 1] \$ .
+\end{itemize}
+
+    \subsubsection{Some clarification:}\label{some-clarification}
+
+Why `M' doesn't appear as a variable within the final mathematical
+expressions for the posterior parameters (\$ \alpha\_N\$ , \$ \beta\_N\$
+) or the posterior PDF itself?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Notation vs.~Calculation:} `M' appears in the \emph{notation}
+  (like \$ p(\theta \textbar{} D, M)\$ ) to explicitly state that all
+  these probabilities are \emph{conditional on the assumed model}.
+\item
+  \textbf{What `M' Represents:} In this context, `M' represents the
+  \textbf{Beta-Binomial Model}. This model choice entails specific
+  assumptions:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The likelihood function is Binomial: \$ p(D \textbar{} \theta, M) =
+    \binom{N}{H} \theta\^{}H (1-\theta)\^{}\{N-H\}\$ .
+  \item
+    The prior distribution for \$ \theta\$ is Beta: \$
+    p(\theta \textbar{} M) = \text{Beta}(\theta \textbar{} \alpha\_0,
+    \beta\_0)\$ .
+  \item
+    Often, the specific hyperparameters (like \$ \alpha\_0=1,
+    \beta\_0=1\$ in your example) are also considered part of the model
+    specification `M'.
+  \end{itemize}
+\item
+  \textbf{Implicit Embedding:} `M' is \textbf{implicitly embedded} in
+  the equations through the \emph{choice} of these specific functions
+  (Binomial likelihood, Beta prior).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When you write \$ p(D \textbar{} \theta, M) \propto \theta\^{}H
+    (1-\theta)\^{}\{N-H\}\$ , you have \emph{already used} the
+    information from M (that it's a Binomial likelihood).
+  \item
+    When you write \$ p(\theta \textbar{} M)
+    \propto \theta\^{}\{\alpha\_0-1\} (1-\theta)\^{}\{\beta\_0-1\}\$ ,
+    you have \emph{already used} the information from M (that it's a
+    Beta prior with specific \$ \alpha\_0, \beta\_0\$ ).
+  \item
+    The final posterior form \$ p(\theta \textbar{} D, M) =
+    \text{Beta}(\theta \textbar{} \alpha\_N, \beta\_N)\$ is a
+    \emph{direct consequence} of choosing this specific model M.
+  \end{itemize}
+\end{enumerate}
+
+\textbf{In Summary:}
+
+\begin{itemize}
+\tightlist
+\item
+  `M' is present in the \textbf{conditional notation} to remind us of
+  the underlying model assumptions.
+\item
+  `M' is \textbf{not a variable} in the calculations themselves.
+\item
+  The \textbf{functional forms} of the likelihood and prior used in the
+  calculations \emph{are} the embodiment of the model `M'.
+\end{itemize}
+
+The notation \$ p(\cdot \textbar{} M)\$ is particularly important in
+\textbf{Bayesian model comparison}, where you might compare different
+models (e.g., Model \$ M\_1\$ vs.~Model \$ M\_2\$ ). In that scenario,
+you would calculate quantities like the evidence \$ p(D\textbar M\_1)\$
+and \$ p(D\textbar M\_2)\$ to see which model better explains the data.
+However, within the context of parameter estimation \emph{under a single
+assumed model}, `M' primarily serves to denote the framework being used.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{beta}
+
+\PY{c+c1}{\PYZsh{} Define the range of x values (probabilities from 0 to 1)}
+\PY{c+c1}{\PYZsh{} Avoid exact 0 and 1 for cases where alpha or beta \PYZlt{} 1 (PDF goes to infinity)}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.999}\PY{p}{,} \PY{l+m+mi}{500}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Parameter Pairs to Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{params} \PY{o}{=} \PY{p}{[}
+    \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}     \PY{c+c1}{\PYZsh{} Uniform (Flat)}
+    \PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}     \PY{c+c1}{\PYZsh{} Symmetric, peaked at 0.5 (weakly confident fair coin)}
+    \PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{,}     \PY{c+c1}{\PYZsh{} Symmetric, more peaked at 0.5 (more confident fair coin)}
+    \PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{,}     \PY{c+c1}{\PYZsh{} Skewed towards 0 (belief in tails bias)}
+    \PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}     \PY{c+c1}{\PYZsh{} Skewed towards 1 (belief in heads bias)}
+    \PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{)}  \PY{c+c1}{\PYZsh{} U\PYZhy{}shaped (belief concentrated near 0 and 1)}
+\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Create the Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{alpha\PYZus{}val}\PY{p}{,} \PY{n}{beta\PYZus{}val} \PY{o+ow}{in} \PY{n}{params}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Calculate the PDF using scipy.stats.beta}
+    \PY{n}{y} \PY{o}{=} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{alpha\PYZus{}val}\PY{p}{,} \PY{n}{beta\PYZus{}val}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Plot the PDF}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Beta(α=}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}val}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, β=}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}val}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mf}{2.5}\PY{p}{)} \PY{c+c1}{\PYZsh{} lw for linewidth}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Customize the Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Various Beta Distributions}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x (Probability Value)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability Density p(x | α, β)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Set axis limits \PYZhy{} might need adjustment depending on peak heights}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{n}{bottom}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{top}\PY{o}{=}\PY{n+nb}{max}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{,} \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} Ensure y starts at 0, adjust top if needed}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Show the Plot \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_17_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Prior hyperparameters (alpha\PYZus{}0, beta\PYZus{}0)}
+\PY{n}{alpha\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{n}{beta\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{1}
+
+\PY{c+c1}{\PYZsh{} Function to calculate prior PDF value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{beta\PYZus{}}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the Beta PDF for given theta.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{beta\PYZus{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate prior density at theta\PYZus{}example}
+\PY{n}{prior\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Prior parameters (α₀, β₀): (}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Prior PDF p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|M): }\PY{l+s+si}{\PYZob{}}\PY{n}{prior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} For the Uniform Beta(1,1) prior, the PDF is 1 everywhere in (0,1)}
+\PY{c+c1}{\PYZsh{} Note: Scipy might give slightly different values at the boundaries 0 or 1.}
+
+\PY{c+c1}{\PYZsh{} Calculate prior over a range (useful for plotting)}
+\PY{n}{prior\PYZus{}values} \PY{o}{=} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot the prior}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior\PYZus{}values}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior: Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior Distribution p(θ|M)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Prior parameters (α₀, β₀): (1, 1)
+Prior PDF p(θ=0.6|M): 1.0000
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_18_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{\texorpdfstring{2. Likelihood Function: \$ p(D \textbar{}
+\theta, M)
+\$}{2. Likelihood Function: \$ p(D \textbar{} , M) \$}}\label{likelihood-function-pd-m}
+
+This represents the probability of observing our specific data (\$ k=7
+\$ heads in \$ n=10 \$ flips) given a \emph{particular} value of the
+coin's bias \$ \theta \$ . For a fixed \$ D \$ , we view this as a
+function of \$ \theta \$ . The standard function here is the Binomial
+probability mass function (PMF).
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: How well does a specific hypothesis \$ \theta \$
+  explain the observed data \$ D \$ ?
+\item
+  \textbf{Mathematical Form}: \$ p(D \textbar{} \theta, M) =
+  \binom{n}{k} \theta\^{}k (1-\theta)\^{}\{n-k\} \$
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 2. Likelihood Function p(D|θ,M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Function to calculate likelihood value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{theta}\PY{p}{)}\PY{p}{:}
+\PY{+w}{  }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the Binomial likelihood P(data|theta).\PYZdq{}\PYZdq{}\PYZdq{}}
+  \PY{n}{n} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+  \PY{n}{k} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+  \PY{c+c1}{\PYZsh{} Using scipy\PYZsq{}s binom.pmf is numerically stable}
+  \PY{c+c1}{\PYZsh{} Note: For visualization or optimization, we often only need the part}
+  \PY{c+c1}{\PYZsh{} proportional to theta\PYZca{}k * (1\PYZhy{}theta)\PYZca{}(n\PYZhy{}k), but here we calculate}
+  \PY{c+c1}{\PYZsh{} the actual probability mass.}
+  \PY{k}{return} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{n}\PY{p}{,} \PY{n}{theta}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate likelihood at theta\PYZus{}example}
+\PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{theta\PYZus{}example}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Data D: n=}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, k=}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Likelihood p(D|θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, M): }\PY{l+s+si}{\PYZob{}}\PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate likelihood over a range (useful for plotting)}
+\PY{n}{likelihood\PYZus{}values} \PY{o}{=} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 2. Plot Likelihood}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{likelihood\PYZus{}values}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood: Binom(}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood Function p(D|θ,M)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 2. Likelihood Function p(D|θ,M) ---
+Data D: n=10, k=7
+Likelihood p(D|θ=0.6, M): 0.2150
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_20_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{3. Evidence (Marginal Likelihood): \$ p(D \textbar{} M)
+\$}\label{evidence-marginal-likelihood-pd-m}
+
+This is the probability of observing the data \$ D \$ under model \$ M
+\$ , integrated over all possible parameter values \$ \theta \$ . It
+acts as the normalization constant in Bayes' theorem.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: Overall, how likely was the observed data under this
+  model \$ M \$ , considering all possibilities for \$ \theta \$
+  weighted by the prior?
+\item
+  \textbf{Mathematical Form}: \$ p(D \textbar{} M) = \int\_0\^{}1 p(D
+  \textbar{} \theta, M) p(\theta \textbar{} M) d\theta \$ \$ p(D
+  \textbar{} M) = \int\_0\^{}1
+  \left[ \binom{n}{k} \theta^k (1-\theta)^{n-k} \right] \left[ \frac{1}{B(\alpha_0, \beta_0)} \theta^{\alpha_0-1} (1-\theta)^{\beta_0-1} \right] d\theta \$
+  \$ p(D \textbar{} M) = \binom{n}{k} \frac{1}{\beta(\alpha_0, \beta_0)}
+  \int\_0\^{}1 \theta\^{}\{k + \alpha\_0 - 1\} (1-\theta)\^{}\{n - k +
+  \beta\_0 - 1\} d\theta \$
+\item
+  The integral is the definition of the Beta function \$ \beta(k +
+  \alpha\_0, n - k + \beta\_0)\$ .
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Substituting this back gives: \$ p(D \textbar{} M) = \binom{n}{k}
+    \frac{\beta(k + \alpha_0, n - k + \beta_0)}{\beta(\alpha_0, \beta_0)}
+    \$
+  \end{itemize}
+\item
+  \textbf{Beta Function Definition:} The definition of the Beta function
+  in terms of Gamma functions is \$ \beta(x, y) =
+  \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)} \$
+\end{itemize}
+
+For the Beta-Binomial case (Beta prior, Binomial likelihood), this
+integral has a closed-form solution related to the Beta function \$
+\beta(\cdot, \cdot) \$ : \$ p(D \textbar{} M) = \binom{n}{k}
+\frac{\beta(k + \alpha_0, n - k + \beta_0)}{\beta(\alpha_0, \beta_0)} \$
+where \$ \beta(x, y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)} \$ .
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 3. Evidence p(D|M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Function to calculate evidence (using the analytical solution for Beta\PYZhy{}Binomial)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{evidence}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}\PY{p}{:}
+\PY{+w}{  }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the marginal likelihood p(D|M).\PYZdq{}\PYZdq{}\PYZdq{}}
+  \PY{n}{n} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+  \PY{n}{k} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+  
+  \PY{c+c1}{\PYZsh{} Calculate the combinatorial term C(n, k)}
+  \PY{c+c1}{\PYZsh{} Using log\PYZhy{}gamma functions for numerical stability is often preferred for large n, k}
+  \PY{c+c1}{\PYZsh{} but scipy.special.binom is fine here.}
+  \PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{binom} \PY{k}{as} \PY{n}{combinations}
+  \PY{n}{comb\PYZus{}term} \PY{o}{=} \PY{n}{combinations}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{k}\PY{p}{)}
+  
+  \PY{c+c1}{\PYZsh{} Calculate using Beta function B(x,y)}
+  \PY{n}{numerator\PYZus{}beta} \PY{o}{=} \PY{n}{beta\PYZus{}function}\PY{p}{(}\PY{n}{k} \PY{o}{+} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{+} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+  \PY{n}{denominator\PYZus{}beta} \PY{o}{=} \PY{n}{beta\PYZus{}function}\PY{p}{(}\PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+  
+  \PY{c+c1}{\PYZsh{} Avoid division by zero if denominator is zero (can happen for certain priors)}
+  \PY{k}{if} \PY{n}{denominator\PYZus{}beta} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+      \PY{c+c1}{\PYZsh{} This case needs careful handling, maybe indicative of an improper prior }
+      \PY{c+c1}{\PYZsh{} or extreme data. For Beta(1,1) this won\PYZsq{}t happen.}
+      \PY{c+c1}{\PYZsh{} Using numerical integration as an alternative:}
+      \PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{quad}
+      \PY{n}{integrand} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+      \PY{n}{result}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{quad}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+      \PY{k}{return} \PY{n}{result}
+
+  \PY{n}{evidence\PYZus{}val} \PY{o}{=} \PY{n}{comb\PYZus{}term} \PY{o}{*} \PY{p}{(}\PY{n}{numerator\PYZus{}beta} \PY{o}{/} \PY{n}{denominator\PYZus{}beta}\PY{p}{)}
+  \PY{k}{return} \PY{n}{evidence\PYZus{}val}
+
+\PY{c+c1}{\PYZsh{} Calculate the evidence}
+\PY{n}{evidence\PYZus{}value} \PY{o}{=} \PY{n}{evidence}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence p(D|M): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}value}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Alternative: Numerical Integration (should give the same result)}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{quad}
+\PY{n}{integrand} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+\PY{n}{evidence\PYZus{}numerical}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{quad}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence p(D|M) (numerical): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}numerical}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Note: The evidence is a single number, not a function of theta.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 3. Evidence p(D|M) ---
+Evidence p(D|M): 0.0909
+Evidence p(D|M) (numerical): 0.0909
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 3. Evidence p(D|M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Function to calculate evidence (using the analytical solution for Beta\PYZhy{}Binomial)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{evidence}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the marginal likelihood p(D|M).\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{n} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{k} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{binom} \PY{k}{as} \PY{n}{combinations}
+    \PY{n}{comb\PYZus{}term} \PY{o}{=} \PY{n}{combinations}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{k}\PY{p}{)}
+    \PY{n}{numerator\PYZus{}beta} \PY{o}{=} \PY{n}{beta\PYZus{}function}\PY{p}{(}\PY{n}{k} \PY{o}{+} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{+} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+    \PY{n}{denominator\PYZus{}beta} \PY{o}{=} \PY{n}{beta\PYZus{}function}\PY{p}{(}\PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+    \PY{k}{if} \PY{n}{denominator\PYZus{}beta} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{quad}
+        \PY{n}{integrand} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+        \PY{n}{result}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{quad}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{return} \PY{n}{result}
+    \PY{n}{evidence\PYZus{}val} \PY{o}{=} \PY{n}{comb\PYZus{}term} \PY{o}{*} \PY{p}{(}\PY{n}{numerator\PYZus{}beta} \PY{o}{/} \PY{n}{denominator\PYZus{}beta}\PY{p}{)}
+    \PY{k}{return} \PY{n}{evidence\PYZus{}val}
+
+\PY{c+c1}{\PYZsh{} Calculate the evidence}
+\PY{n}{evidence\PYZus{}value} \PY{o}{=} \PY{n}{evidence}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence p(D|M): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}value}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Alternative: Numerical Integration (should give the same result)}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{quad}
+\PY{n}{integrand} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+\PY{n}{evidence\PYZus{}numerical}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{quad}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence p(D|M) (numerical): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}numerical}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot prior, likelihood, and posterior together}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{n\PYZus{}heads}\PY{p}{,} \PY{n}{n\PYZus{}trials}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{posterior}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior, Likelihood, and Posterior Distributions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density / Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 3. Evidence p(D|M) ---
+Evidence p(D|M): 0.0909
+Evidence p(D|M) (numerical): 0.0909
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_23_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{\texorpdfstring{4. Posterior PDF: \$ p(\theta \textbar{} D,
+M)
+\$}{4. Posterior PDF: \$ p(\textbar{} D, M) \$}}\label{posterior-pdf-p-d-m}
+
+This is our updated belief about \$ \theta \$ after considering the data
+\$ D \$ . It's obtained by combining the prior and the likelihood using
+Bayes' theorem.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Meaning}: Given the observed flips, what is the probability
+  distribution for the coin's bias \$ \theta \$ ?
+\item
+  \textbf{Mathematical Form}: \$ p(\theta \textbar{} D, M) =
+  \frac{p(D | \theta, M) p(\theta | M)}{p(D | M)} \$
+\end{itemize}
+
+For the Beta-Binomial case, the posterior distribution is also a Beta
+distribution: \$ p(\theta \textbar{} D, M) =
+\text{Beta}(\theta \textbar{} k + \alpha\_0, n - k + \beta\_0) \$ Let \$
+\alpha\_n = k + \alpha\_0 \$ and \$ \beta\_n = n - k + \beta\_0 \$ . \$
+p(\theta \textbar{} D, M) =
+\frac{\Gamma(\alpha_n + \beta_n)}{\Gamma(\alpha_n)\Gamma(\beta_n)}
+\theta\^{}\{\alpha\_n-1\} (1-\theta)\^{}\{\beta\_n-1\} \$
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 4. Posterior PDF p(θ|D,M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Posterior hyperparameters (alpha\PYZus{}n, beta\PYZus{}n)}
+\PY{n}{alpha\PYZus{}posterior} \PY{o}{=} \PY{n}{n\PYZus{}heads} \PY{o}{+} \PY{n}{alpha\PYZus{}prior}
+\PY{n}{beta\PYZus{}posterior} \PY{o}{=} \PY{p}{(}\PY{n}{n\PYZus{}trials} \PY{o}{\PYZhy{}} \PY{n}{n\PYZus{}heads}\PY{p}{)} \PY{o}{+} \PY{n}{beta\PYZus{}prior}
+
+\PY{c+c1}{\PYZsh{} Function to calculate posterior PDF value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}\PY{p}{:}
+\PY{+w}{  }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the posterior Beta PDF.\PYZdq{}\PYZdq{}\PYZdq{}}
+  \PY{k}{return} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate posterior density at theta\PYZus{}example}
+\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{alpha\PYZus{}posterior}\PY{p}{,} \PY{n}{beta\PYZus{}posterior}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior parameters (αₙ, βₙ): (}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior PDF p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D, M): }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate posterior over a range (useful for plotting)}
+\PY{n}{posterior\PYZus{}values} \PY{o}{=} \PY{n}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{alpha\PYZus{}posterior}\PY{p}{,} \PY{n}{beta\PYZus{}posterior}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Verification: Check Bayes\PYZsq{} Theorem calculation \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Posterior = (Likelihood * Prior) / Evidence}
+\PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{*} \PY{n}{prior\PYZus{}at\PYZus{}theta\PYZus{}example}
+\PY{n}{posterior\PYZus{}calculated} \PY{o}{=} \PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{/} \PY{n}{evidence\PYZus{}value}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Verification \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Likelihood * Prior at θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence: }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}value}\PY{l+s+si}{:}\PY{l+s+s2}{.4e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D,M) calculated via Bayes}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ Thm: }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}calculated}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D,M) from Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{) PDF: }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} These two values should be very close (any difference due to floating point precision)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 4. Posterior PDF p(θ|D,M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Posterior hyperparameters (alpha\PYZus{}n, beta\PYZus{}n)}
+\PY{n}{alpha\PYZus{}posterior} \PY{o}{=} \PY{n}{n\PYZus{}heads} \PY{o}{+} \PY{n}{alpha\PYZus{}prior}
+\PY{n}{beta\PYZus{}posterior} \PY{o}{=} \PY{p}{(}\PY{n}{n\PYZus{}trials} \PY{o}{\PYZhy{}} \PY{n}{n\PYZus{}heads}\PY{p}{)} \PY{o}{+} \PY{n}{beta\PYZus{}prior}
+
+\PY{c+c1}{\PYZsh{} Function to calculate posterior PDF value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the posterior Beta PDF.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate posterior density at theta\PYZus{}example}
+\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{alpha\PYZus{}posterior}\PY{p}{,} \PY{n}{beta\PYZus{}posterior}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior parameters (αₙ, βₙ): (}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior PDF p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D, M): }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate posterior over a range (useful for plotting)}
+\PY{n}{posterior\PYZus{}values} \PY{o}{=} \PY{n}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{alpha\PYZus{}posterior}\PY{p}{,} \PY{n}{beta\PYZus{}posterior}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Verification: Check Bayes\PYZsq{} Theorem calculation \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Posterior = (Likelihood * Prior) / Evidence}
+\PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{*} \PY{n}{prior\PYZus{}at\PYZus{}theta\PYZus{}example}
+\PY{n}{posterior\PYZus{}calculated} \PY{o}{=} \PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{/} \PY{n}{evidence\PYZus{}value}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Verification \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Likelihood * Prior at θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence: }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}value}\PY{l+s+si}{:}\PY{l+s+s2}{.4e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D,M) calculated via Bayes}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ Thm: }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}calculated}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D,M) from Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{) PDF: }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} These two values should be very close (any difference due to floating point precision)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Plots for step\PYZhy{}by\PYZhy{}step example \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior: Beta(1,1)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{n\PYZus{}heads}\PY{p}{,} \PY{n}{n\PYZus{}trials}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{posterior\PYZus{}values}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior: Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{axvline}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gray}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior, Likelihood, and Posterior Distributions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density / Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 4. Posterior PDF p(θ|D,M) ---
+Posterior parameters (αₙ, βₙ): (8, 4)
+Posterior PDF p(θ=0.6|D, M): 2.3649
+
+--- Verification ---
+Likelihood * Prior at θ=0.6: 2.1499e-01
+Evidence: 9.0909e-02
+Posterior p(θ=0.6|D,M) calculated via Bayes' Thm: 2.3649
+Posterior p(θ=0.6|D,M) from Beta(8,4) PDF: 2.3649
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_26_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    This example demonstrates how each term in Bayes' theorem contributes to
+updating our knowledge about the parameter \$ \theta \$ from the prior
+belief to the posterior belief, using the likelihood derived from the
+data and normalized by the evidence. The choice of a conjugate prior
+(Beta for Binomial) simplifies the calculation, as the posterior
+distribution belongs to the same family as the prior. In more complex
+scenarios, numerical methods like Markov Chain Monte Carlo (MCMC) are
+often required to approximate the posterior distribution.
+
+    \subsubsection{\texorpdfstring{Posterior: \$ p(\theta \textbar{} D, M) =
+\frac{p(D | \theta, M) p(\theta | M)}{p(D | M)}
+\$}{Posterior: \$ p(\textbar{} D, M) =  \$}}\label{posterior-p-d-m}
+
+    MCMC (Markov Chain Monte Carlo) is a computational technique used to
+\textbf{sample from} a probability distribution, especially when the
+distribution is complex or high-dimensional and cannot be easily
+described or calculated analytically.
+
+In the context of Bayes' Theorem:
+
+\$ p(\theta \textbar{} D, M) =
+\frac{p(D | \theta, M) p(\theta | M)}{p(D | M)} \$
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  We often \emph{can} evaluate the \textbf{Likelihood} \$ p(D \textbar{}
+  \theta, M) \$ for a given \$ \theta \$ .
+\item
+  We often \emph{can} evaluate the \textbf{Prior} \$ p(\theta \textbar{}
+  M) \$ for a given \$ \theta \$ .
+\item
+  Therefore, we can evaluate the \emph{numerator}: \$ p(D \textbar{}
+  \theta, M) p(\theta \textbar{} M) \$ .
+\item
+  The \textbf{Evidence} \$ p(D \textbar{} M) = \int p(D \textbar{}
+  \theta, M) p(\theta \textbar{} M) d\theta \$ involves an integral (or
+  sum) over all possible \$ \theta \$ . This integral is often
+  high-dimensional and analytically intractable (impossible or extremely
+  difficult to calculate directly).
+\item
+  Notice that the \textbf{Posterior} \$ p(\theta \textbar{} D, M) \$ is
+  \emph{proportional} to the numerator: \$ p(\theta \textbar{} D, M)
+  \propto p(D \textbar{} \theta, M) p(\theta \textbar{} M) \$ . The
+  Evidence \$ p(D \textbar{} M) \$ is just a normalization constant that
+  makes the posterior integrate to 1.
+\end{enumerate}
+
+\textbf{How MCMC fits in:}
+
+MCMC algorithms (like Metropolis-Hastings or Gibbs Sampling) are
+designed to draw samples from a target distribution even if we only know
+that distribution \emph{up to a constant of proportionality}.
+
+Therefore, MCMC allows us to generate a large set of samples \$
+\{\theta\_1, \theta\_2, \ldots, \theta\_N\} \$ that are effectively
+drawn \emph{from} the \textbf{Posterior PDF} \$ p(\theta \textbar{} D,
+M) \$ , \emph{without ever needing to calculate the difficult Evidence
+term} \$ p(D \textbar{} M) \$ .
+
+\textbf{Conclusion:}
+
+MCMC doesn't substitute a \emph{single term} in the equation in the
+sense of replacing it with a value. Instead, MCMC provides a
+computational method to \textbf{approximate or sample from the entire
+Posterior PDF \$ p(\theta \textbar{} D, M) \$ }. It essentially bypasses
+the need to calculate the Evidence \$ p(D \textbar{} M) \$ by directly
+generating samples whose distribution converges to the true posterior
+distribution.
+
+So, the most accurate answer is that MCMC is used to \textbf{obtain the
+Posterior PDF \$ p(\theta \textbar{} D, M) \$ } (in the form of samples)
+when direct calculation is intractable, primarily due to the difficulty
+of computing the Evidence \$ p(D \textbar{} M) \$ .
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Example Setup \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Data D: Number of trials (n) and number of successes/heads (k)}
+\PY{n}{n\PYZus{}trials} \PY{o}{=} \PY{l+m+mi}{10}
+\PY{n}{n\PYZus{}heads} \PY{o}{=} \PY{l+m+mi}{7}
+\PY{n}{data\PYZus{}D} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{n\PYZus{}trials}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{n\PYZus{}heads}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Prior hyperparameters (alpha\PYZus{}0, beta\PYZus{}0)}
+\PY{n}{alpha\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{n}{beta\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{1}
+
+\PY{c+c1}{\PYZsh{} Function to calculate prior PDF value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{beta\PYZus{}}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the Beta PDF for given theta.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{beta\PYZus{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate prior density at theta\PYZus{}example}
+\PY{n}{prior\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 2. Likelihood Function p(D|θ,M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Function to calculate likelihood value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{theta}\PY{p}{)}\PY{p}{:}
+\PY{+w}{  }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the Binomial likelihood P(data|theta).\PYZdq{}\PYZdq{}\PYZdq{}}
+  \PY{n}{n} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+  \PY{n}{k} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+  \PY{c+c1}{\PYZsh{} Using scipy\PYZsq{}s binom.pmf is numerically stable}
+  \PY{c+c1}{\PYZsh{} Note: For visualization or optimization, we often only need the part}
+  \PY{c+c1}{\PYZsh{} proportional to theta\PYZca{}k * (1\PYZhy{}theta)\PYZca{}(n\PYZhy{}k), but here we calculate}
+  \PY{c+c1}{\PYZsh{} the actual probability mass.}
+  \PY{k}{return} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{k}\PY{p}{,} \PY{n}{n}\PY{p}{,} \PY{n}{theta}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate likelihood at theta\PYZus{}example}
+\PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{theta\PYZus{}example}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Data D: n=}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, k=}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Likelihood p(D|θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, M): }\PY{l+s+si}{\PYZob{}}\PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate likelihood over a range (useful for plotting)}
+\PY{n}{likelihood\PYZus{}values} \PY{o}{=} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 2. Plot Likelihood}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{likelihood\PYZus{}values}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood: Binom(}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{k}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{data\PYZus{}D}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood Function p(D|θ,M)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 2. Likelihood Function p(D|θ,M) ---
+Data D: n=10, k=7
+Likelihood p(D|θ=0.6, M): 0.2150
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_32_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 3. Evidence p(D|M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Function to calculate evidence (using the analytical solution for Beta\PYZhy{}Binomial)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{evidence}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the marginal likelihood p(D|M).\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{n} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{k} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{binom} \PY{k}{as} \PY{n}{combinations}
+    \PY{n}{comb\PYZus{}term} \PY{o}{=} \PY{n}{combinations}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{k}\PY{p}{)}
+    \PY{n}{numerator\PYZus{}beta} \PY{o}{=} \PY{n}{beta\PYZus{}function}\PY{p}{(}\PY{n}{k} \PY{o}{+} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{k} \PY{o}{+} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+    \PY{n}{denominator\PYZus{}beta} \PY{o}{=} \PY{n}{beta\PYZus{}function}\PY{p}{(}\PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+    \PY{k}{if} \PY{n}{denominator\PYZus{}beta} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{quad}
+        \PY{n}{integrand} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{alpha\PYZus{}pr}\PY{p}{,} \PY{n}{beta\PYZus{}pr}\PY{p}{)}
+        \PY{n}{result}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{quad}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{return} \PY{n}{result}
+    \PY{n}{evidence\PYZus{}val} \PY{o}{=} \PY{n}{comb\PYZus{}term} \PY{o}{*} \PY{p}{(}\PY{n}{numerator\PYZus{}beta} \PY{o}{/} \PY{n}{denominator\PYZus{}beta}\PY{p}{)}
+    \PY{k}{return} \PY{n}{evidence\PYZus{}val}
+
+\PY{c+c1}{\PYZsh{} Calculate the evidence}
+\PY{n}{evidence\PYZus{}value} \PY{o}{=} \PY{n}{evidence}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence p(D|M): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}value}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Alternative: Numerical Integration (should give the same result)}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{quad}
+\PY{n}{integrand} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{likelihood\PYZus{}func}\PY{p}{(}\PY{n}{data\PYZus{}D}\PY{p}{,} \PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{prior\PYZus{}pdf}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+\PY{n}{evidence\PYZus{}numerical}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{quad}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence p(D|M) (numerical): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}numerical}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot prior, likelihood, and posterior together}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{n\PYZus{}heads}\PY{p}{,} \PY{n}{n\PYZus{}trials}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{posterior}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior, Likelihood, and Posterior Distributions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density / Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 3. Evidence p(D|M) ---
+Evidence p(D|M): 0.0909
+Evidence p(D|M) (numerical): 0.0909
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_33_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} 4. Posterior PDF p(θ|D,M) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Posterior hyperparameters (alpha\PYZus{}n, beta\PYZus{}n)}
+\PY{n}{alpha\PYZus{}posterior} \PY{o}{=} \PY{n}{n\PYZus{}heads} \PY{o}{+} \PY{n}{alpha\PYZus{}prior}
+\PY{n}{beta\PYZus{}posterior} \PY{o}{=} \PY{p}{(}\PY{n}{n\PYZus{}trials} \PY{o}{\PYZhy{}} \PY{n}{n\PYZus{}heads}\PY{p}{)} \PY{o}{+} \PY{n}{beta\PYZus{}prior}
+
+\PY{c+c1}{\PYZsh{} Function to calculate posterior PDF value(s)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calculates the posterior Beta PDF.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{n}{beta}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate posterior density at theta\PYZus{}example}
+\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{alpha\PYZus{}posterior}\PY{p}{,} \PY{n}{beta\PYZus{}posterior}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior parameters (αₙ, βₙ): (}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior PDF p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D, M): }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculate posterior over a range (useful for plotting)}
+\PY{n}{posterior\PYZus{}values} \PY{o}{=} \PY{n}{posterior\PYZus{}pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{alpha\PYZus{}posterior}\PY{p}{,} \PY{n}{beta\PYZus{}posterior}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Verification: Check Bayes\PYZsq{} Theorem calculation \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Posterior = (Likelihood * Prior) / Evidence}
+\PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{=} \PY{n}{likelihood\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{*} \PY{n}{prior\PYZus{}at\PYZus{}theta\PYZus{}example}
+\PY{n}{posterior\PYZus{}calculated} \PY{o}{=} \PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example} \PY{o}{/} \PY{n}{evidence\PYZus{}value}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Verification \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Likelihood * Prior at θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{numerator\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Evidence: }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence\PYZus{}value}\PY{l+s+si}{:}\PY{l+s+s2}{.4e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D,M) calculated via Bayes}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ Thm: }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}calculated}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior p(θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{|D,M) from Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{) PDF: }\PY{l+s+si}{\PYZob{}}\PY{n}{posterior\PYZus{}at\PYZus{}theta\PYZus{}example}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} These two values should be very close (any difference due to floating point precision)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Plots for step\PYZhy{}by\PYZhy{}step example \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior: Beta(1,1)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{binom}\PY{o}{.}\PY{n}{pmf}\PY{p}{(}\PY{n}{n\PYZus{}heads}\PY{p}{,} \PY{n}{n\PYZus{}trials}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{posterior\PYZus{}values}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior: Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}posterior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{axvline}\PY{p}{(}\PY{n}{theta\PYZus{}example}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gray}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ=}\PY{l+s+si}{\PYZob{}}\PY{n}{theta\PYZus{}example}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior, Likelihood, and Posterior Distributions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{θ}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density / Probability}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+--- 4. Posterior PDF p(θ|D,M) ---
+Posterior parameters (αₙ, βₙ): (8, 4)
+Posterior PDF p(θ=0.6|D, M): 2.3649
+
+--- Verification ---
+Likelihood * Prior at θ=0.6: 2.1499e-01
+Evidence: 9.0909e-02
+Posterior p(θ=0.6|D,M) calculated via Bayes' Thm: 2.3649
+Posterior p(θ=0.6|D,M) from Beta(8,4) PDF: 2.3649
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_34_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section{MCMC Example}\label{mcmc-example}
+
+    We'll use the classic problem of estimating the bias (\$ \theta \$ ) of
+a coin given some observed flips (\$ D \$ ).
+
+\textbf{Scenario:}
+
+\begin{itemize}
+\tightlist
+\item
+  We flip a coin \$ N=20 \$ times.
+\item
+  We observe \$ n\_H=15 \$ heads.
+\item
+  Our data is \$ D = (N=20, n\_H=15) \$ .
+\item
+  Our parameter is \$ \theta \$ , the probability of getting heads (\$ 0
+  \le \theta \le 1 \$ ).
+\item
+  Our model \$ M \$ is the assumption that the flips are independent
+  Bernoulli trials (a Binomial process).
+\end{itemize}
+
+\textbf{1. Define the Prior \$ p(\theta \textbar{} M) \$ }
+
+Let's assume a relatively uninformative prior belief about the coin's
+bias. A Beta distribution is a common choice for probabilities as it's
+defined on \$ {[}0, 1{]} \$ . We'll use a Beta(α=2, β=2) prior, which
+slightly favors fair coins but allows for bias.
+
+\$ p(\theta \textbar{} M) = \text{Beta}(\theta \textbar{} \alpha=2,
+\beta=2) = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\theta\^{}\{\alpha-1\} (1-\theta)\^{}\{\beta-1\} =
+\frac{\Gamma(4)}{\Gamma(2)\Gamma(2)} \theta\^{}\{1\} (1-\theta)\^{}\{1\}
+= 6 \theta (1-\theta) \$
+
+\textbf{2. Define the Likelihood \$ p(D \textbar{} \theta, M) \$ }
+
+Given a specific bias \$ \theta \$ , the probability of observing \$
+n\_H \$ heads in \$ N \$ flips follows a Binomial distribution:
+
+\$ p(D \textbar{} \theta, M) = \text{Binomial}(n\_H \textbar{} N,
+\theta) = \binom{N}{n_H} \theta\^{}\{n\_H\} (1-\theta)\^{}\{N-n\_H\} \$
+\$ p(D \textbar{} \theta, M) = \binom{20}{15} \theta\^{}\{15\}
+(1-\theta)\^{}\{5\} = 15504 , \theta\^{}\{15\} (1-\theta)\^{}\{5\} \$
+
+\textbf{3. Calculate the Evidence \$ p(D \textbar{} M) \$ }
+
+The Evidence is the integral of the likelihood times the prior over all
+possible values of \$ \theta \$ :
+
+\$ p(D \textbar{} M) = \int\_0\^{}1 p(D \textbar{} \theta, M)
+p(\theta \textbar{} M) d\theta \$ \$ p(D \textbar{} M) = \int\_0\^{}1
+\left[ \binom{N}{n_H} \theta^{n_H} (1-\theta)^{N-n_H} \right] \left[ \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \theta^{\alpha-1} (1-\theta)^{\beta-1} \right] d\theta \$
+\$ p(D \textbar{} M) = \binom{N}{n_H}
+\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \int\_0\^{}1
+\theta\^{}\{n\_H + \alpha - 1\} (1-\theta)\^{}\{N - n\_H + \beta - 1\}
+d\theta \$
+
+Recognize that the integral is related to the Beta function \$ B(x, y) =
+\int\_0\^{}1 t\^{}\{x-1\} (1-t)\^{}\{y-1\} dt =
+\frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)} \$ . Here, \$ x = n\_H +
+\alpha \$ and \$ y = N - n\_H + \beta \$ .
+
+\$ p(D \textbar{} M) = \binom{N}{n_H}
+\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\frac{\Gamma(n_H + \alpha)\Gamma(N - n_H + \beta)}{\Gamma(N + \alpha + \beta)}
+\$
+
+Plugging in our values (\$ N=20, n\_H=15, \alpha=2, \beta=2 \$ ): \$ p(D
+\textbar{} M) = \binom{20}{15} \frac{\Gamma(4)}{\Gamma(2)\Gamma(2)}
+\frac{\Gamma(15 + 2)\Gamma(20 - 15 + 2)}{\Gamma(20 + 2 + 2)} \$ \$ p(D
+\textbar{} M) = 15504 \times \frac{3!}{1! \times 1!}
+\times \frac{\Gamma(17)\Gamma(7)}{\Gamma(24)} \$ \$ p(D \textbar{} M) =
+15504 \times 6 \times \frac{16! \times 6!}{23!} \$
+
+We can use \texttt{scipy.special} functions to calculate this:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{comb}\PY{p}{,} \PY{n}{gamma}\PY{p}{,} \PY{n}{beta} \PY{k}{as} \PY{n}{beta\PYZus{}func} \PY{c+c1}{\PYZsh{} beta\PYZus{}func to avoid name clash}
+
+\PY{n}{N} \PY{o}{=} \PY{l+m+mi}{20}
+\PY{n}{n\PYZus{}H} \PY{o}{=} \PY{l+m+mi}{15}
+\PY{n}{alpha\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{2}
+\PY{n}{beta\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{2}
+
+\PY{c+c1}{\PYZsh{} Calculate Evidence}
+\PY{n}{term1} \PY{o}{=} \PY{n}{comb}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{n\PYZus{}H}\PY{p}{)}
+\PY{n}{term2} \PY{o}{=} \PY{n}{gamma}\PY{p}{(}\PY{n}{alpha\PYZus{}prior} \PY{o}{+} \PY{n}{beta\PYZus{}prior}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{gamma}\PY{p}{(}\PY{n}{alpha\PYZus{}prior}\PY{p}{)} \PY{o}{*} \PY{n}{gamma}\PY{p}{(}\PY{n}{beta\PYZus{}prior}\PY{p}{)}\PY{p}{)}
+\PY{n}{term3\PYZus{}integral} \PY{o}{=} \PY{n}{beta\PYZus{}func}\PY{p}{(}\PY{n}{n\PYZus{}H} \PY{o}{+} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{n\PYZus{}H} \PY{o}{+} \PY{n}{beta\PYZus{}prior}\PY{p}{)} \PY{c+c1}{\PYZsh{} B(x,y) = gamma(x)gamma(y)/gamma(x+y)}
+
+\PY{n}{evidence} \PY{o}{=} \PY{n}{term1} \PY{o}{*} \PY{n}{term2} \PY{o}{*} \PY{n}{term3\PYZus{}integral}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Prior parameters (alpha, beta): (}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Data (N, n\PYZus{}H): (}\PY{l+s+si}{\PYZob{}}\PY{n}{N}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{n\PYZus{}H}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Calculated Evidence p(D|M): }\PY{l+s+si}{\PYZob{}}\PY{n}{evidence}\PY{l+s+si}{:}\PY{l+s+s2}{.6g}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Output: Calculated Evidence p(D|M): 0.00288997}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Prior parameters (alpha, beta): (2, 2)
+Data (N, n\_H): (20, 15)
+Calculated Evidence p(D|M): 0.0542067
+    \end{Verbatim}
+
+    \textbf{Important Note:} We could calculate the evidence analytically
+here \emph{because} we chose a Beta prior and a Binomial likelihood (a
+conjugate pair). For most complex models, this integral is intractable,
+which is precisely why MCMC is needed for the posterior.
+
+\textbf{4. Calculate the Posterior \$ p(\theta \textbar{} D, M) \$ using
+MCMC}
+
+We know the posterior is proportional to the likelihood times the prior:
+\$ p(\theta \textbar{} D, M) \propto p(D \textbar{} \theta, M)
+p(\theta \textbar{} M) \$ \$ p(\theta \textbar{} D, M)
+\propto \left[ \theta^{n_H} (1-\theta)^{N-n_H} \right] \left[ \theta^{\alpha-1} (1-\theta)^{\beta-1} \right] \$
+\$ p(\theta \textbar{} D, M) \propto \theta\^{}\{n\_H + \alpha - 1\}
+(1-\theta)\^{}\{N - n\_H + \beta - 1\} \$ \$ p(\theta \textbar{} D, M)
+\propto \theta\^{}\{15 + 2 - 1\} (1-\theta)\^{}\{20 - 15 + 2 - 1\} =
+\theta\^{}\{16\} (1-\theta)\^{}\{6\} \$
+
+This is the \emph{kernel} of the posterior distribution. For MCMC
+(specifically Metropolis-Hastings), we only need a function proportional
+to the posterior density. It's often numerically better to work with
+log-probabilities:
+
+\$ \log[p(\theta | D, M)] \propto (n\_H + \alpha - 1) \log(\theta) + (N
+- n\_H + \beta - 1) \log(1-\theta) \$
+
+Let's implement Metropolis-Hastings:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{beta}\PY{p}{,} \PY{n}{norm}\PY{p}{,} \PY{n}{uniform}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{special}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{comb}\PY{p}{,} \PY{n}{gamma}\PY{p}{,} \PY{n}{beta} \PY{k}{as} \PY{n}{beta\PYZus{}func}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Model Parameters \PYZam{} Data \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{N} \PY{o}{=} \PY{l+m+mi}{20}
+\PY{n}{n\PYZus{}H} \PY{o}{=} \PY{l+m+mi}{15}
+\PY{n}{alpha\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{2}
+\PY{n}{beta\PYZus{}prior} \PY{o}{=} \PY{l+m+mi}{2}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Define Log Target (Unnormalized Log Posterior) \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Proportional to log(likelihood * prior)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{log\PYZus{}target}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{n\PYZus{}H}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{beta\PYZus{}p}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{theta} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{0} \PY{o+ow}{or} \PY{n}{theta} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{1}\PY{p}{:} \PY{c+c1}{\PYZsh{} Avoid log(0) and stay within bounds}
+        \PY{k}{return} \PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{inf}
+    \PY{n}{log\PYZus{}lik} \PY{o}{=} \PY{n}{n\PYZus{}H} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{theta}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{n\PYZus{}H}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{theta}\PY{p}{)}
+    \PY{n}{log\PYZus{}prior} \PY{o}{=} \PY{p}{(}\PY{n}{alpha} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{theta}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{n}{beta\PYZus{}p} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{theta}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} We can ignore constant terms like comb(N,n\PYZus{}H) and prior normalization}
+    \PY{k}{return} \PY{n}{log\PYZus{}lik} \PY{o}{+} \PY{n}{log\PYZus{}prior}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} MCMC Settings \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{n\PYZus{}samples} \PY{o}{=} \PY{l+m+mi}{20000}
+\PY{n}{burn\PYZus{}in} \PY{o}{=} \PY{l+m+mi}{5000}
+\PY{n}{proposal\PYZus{}std} \PY{o}{=} \PY{l+m+mf}{0.05} \PY{c+c1}{\PYZsh{} Tune this for reasonable acceptance rate}
+\PY{n}{theta\PYZus{}current} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{c+c1}{\PYZsh{} Starting point}
+\PY{n}{samples} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{accepted\PYZus{}count} \PY{o}{=} \PY{l+m+mi}{0}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Metropolis\PYZhy{}Hastings Sampler \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}samples}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Propose a new theta}
+    \PY{n}{theta\PYZus{}proposal} \PY{o}{=} \PY{n}{norm}\PY{o}{.}\PY{n}{rvs}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{n}{theta\PYZus{}current}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{n}{proposal\PYZus{}std}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Calculate acceptance probability (in log space)}
+    \PY{n}{log\PYZus{}p\PYZus{}current} \PY{o}{=} \PY{n}{log\PYZus{}target}\PY{p}{(}\PY{n}{theta\PYZus{}current}\PY{p}{,} \PY{n}{n\PYZus{}H}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+    \PY{n}{log\PYZus{}p\PYZus{}proposal} \PY{o}{=} \PY{n}{log\PYZus{}target}\PY{p}{(}\PY{n}{theta\PYZus{}proposal}\PY{p}{,} \PY{n}{n\PYZus{}H}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Check if proposal is valid before calculating acceptance ratio}
+    \PY{k}{if} \PY{n}{np}\PY{o}{.}\PY{n}{isinf}\PY{p}{(}\PY{n}{log\PYZus{}p\PYZus{}proposal}\PY{p}{)}\PY{p}{:}
+         \PY{n}{log\PYZus{}acceptance\PYZus{}ratio} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{inf} \PY{c+c1}{\PYZsh{} Automatically reject invalid proposals}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{log\PYZus{}acceptance\PYZus{}ratio} \PY{o}{=} \PY{n}{log\PYZus{}p\PYZus{}proposal} \PY{o}{\PYZhy{}} \PY{n}{log\PYZus{}p\PYZus{}current}
+        \PY{c+c1}{\PYZsh{} Note: Proposal distribution N(theta|theta\PYZus{}current, std) is symmetric,}
+        \PY{c+c1}{\PYZsh{} so q(theta\PYZsq{}|theta)/q(theta|theta\PYZsq{}) = 1, and doesn\PYZsq{}t appear in the ratio.}
+
+    \PY{c+c1}{\PYZsh{} Accept or reject}
+    \PY{n}{log\PYZus{}u} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{uniform}\PY{o}{.}\PY{n}{rvs}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{k}{if} \PY{n}{log\PYZus{}u} \PY{o}{\PYZlt{}} \PY{n}{log\PYZus{}acceptance\PYZus{}ratio}\PY{p}{:}
+        \PY{n}{theta\PYZus{}current} \PY{o}{=} \PY{n}{theta\PYZus{}proposal}
+        \PY{k}{if} \PY{n}{i} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{burn\PYZus{}in}\PY{p}{:} \PY{c+c1}{\PYZsh{} Only count acceptance after burn\PYZhy{}in}
+             \PY{n}{accepted\PYZus{}count} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+
+    \PY{c+c1}{\PYZsh{} Store sample (after burn\PYZhy{}in)}
+    \PY{k}{if} \PY{n}{i} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{burn\PYZus{}in}\PY{p}{:}
+        \PY{n}{samples}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{theta\PYZus{}current}\PY{p}{)}
+
+\PY{n}{samples} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{samples}\PY{p}{)}
+\PY{n}{acceptance\PYZus{}rate} \PY{o}{=} \PY{n}{accepted\PYZus{}count} \PY{o}{/} \PY{p}{(}\PY{n}{n\PYZus{}samples} \PY{o}{\PYZhy{}} \PY{n}{burn\PYZus{}in}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{MCMC Results:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of samples (post burn\PYZhy{}in): }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{samples}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Acceptance Rate: }\PY{l+s+si}{\PYZob{}}\PY{n}{acceptance\PYZus{}rate}\PY{l+s+si}{:}\PY{l+s+s2}{.3f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} Aim for \PYZti{}0.2 \PYZhy{} 0.5}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior Mean (from MCMC): }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{samples}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Posterior 95\PYZpc{} Credible Interval (from MCMC): }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{percentile}\PY{p}{(}\PY{n}{samples}\PY{p}{,}\PY{+w}{ }\PY{p}{[}\PY{l+m+mf}{2.5}\PY{p}{,}\PY{+w}{ }\PY{l+m+mf}{97.5}\PY{p}{]}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Analytical Posterior (for comparison) \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{c+c1}{\PYZsh{} Because we used a conjugate prior, the posterior is also Beta}
+\PY{n}{alpha\PYZus{}post} \PY{o}{=} \PY{n}{n\PYZus{}H} \PY{o}{+} \PY{n}{alpha\PYZus{}prior}     \PY{c+c1}{\PYZsh{} 15 + 2 = 17}
+\PY{n}{beta\PYZus{}post} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{n\PYZus{}H} \PY{o}{+} \PY{n}{beta\PYZus{}prior} \PY{c+c1}{\PYZsh{} 20 \PYZhy{} 15 + 2 = 7}
+\PY{n}{analytical\PYZus{}posterior} \PY{o}{=} \PY{n}{beta}\PY{p}{(}\PY{n}{alpha\PYZus{}post}\PY{p}{,} \PY{n}{beta\PYZus{}post}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Analytical Posterior (Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}post}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, }\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}post}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{))}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Analytical Mean: }\PY{l+s+si}{\PYZob{}}\PY{n}{analytical\PYZus{}posterior}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Analytical 95\PYZpc{} Credible Interval: }\PY{l+s+si}{\PYZob{}}\PY{n}{analytical\PYZus{}posterior}\PY{o}{.}\PY{n}{interval}\PY{p}{(}\PY{l+m+mf}{0.95}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} Visualization \PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{theta\PYZus{}range} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.99}\PY{p}{,} \PY{l+m+mi}{500}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot Prior}
+\PY{n}{prior\PYZus{}pdf} \PY{o}{=} \PY{n}{beta}\PY{p}{(}\PY{n}{alpha\PYZus{}prior}\PY{p}{,} \PY{n}{beta\PYZus{}prior}\PY{p}{)}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{prior\PYZus{}pdf}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prior Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}prior}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot Likelihood (normalized to integrate to 1 for visualization)}
+\PY{c+c1}{\PYZsh{} Note: This is p(D|theta), treated as a function of theta}
+\PY{n}{likelihood\PYZus{}vals} \PY{o}{=} \PY{p}{[}\PY{n}{comb}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{n\PYZus{}H}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{t}\PY{o}{*}\PY{o}{*}\PY{n}{n\PYZus{}H}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{t}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{n}{N}\PY{o}{\PYZhy{}}\PY{n}{n\PYZus{}H}\PY{p}{)}\PY{p}{)} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{theta\PYZus{}range}\PY{p}{]}
+\PY{n}{likelihood\PYZus{}norm} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{trapz}\PY{p}{(}\PY{n}{likelihood\PYZus{}vals}\PY{p}{,} \PY{n}{theta\PYZus{}range}\PY{p}{)} \PY{c+c1}{\PYZsh{} Simple normalization}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{likelihood\PYZus{}vals} \PY{o}{/} \PY{n}{likelihood\PYZus{}norm}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood (normalized)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{orange}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot MCMC Posterior Histogram}
+\PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{samples}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{density}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Posterior (MCMC Samples)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot Analytical Posterior PDF}
+\PY{n}{analytical\PYZus{}post\PYZus{}pdf} \PY{o}{=} \PY{n}{analytical\PYZus{}posterior}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{theta\PYZus{}range}\PY{p}{,} \PY{n}{analytical\PYZus{}post\PYZus{}pdf}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Analytical Posterior Beta(}\PY{l+s+si}{\PYZob{}}\PY{n}{alpha\PYZus{}post}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZob{}}\PY{n}{beta\PYZus{}post}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bayesian Inference of Coin Bias}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{} }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{theta\PYZdl{} (Probability of Heads)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Density}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot MCMC Trace}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{samples}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MCMC Trace Plot for \PYZdl{} }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{theta\PYZdl{} }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Iteration (Post Burn\PYZhy{}in)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{} }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{theta\PYZdl{} }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+MCMC Results:
+Number of samples (post burn-in): 15000
+Acceptance Rate: 0.831
+Posterior Mean (from MCMC): 0.7052
+Posterior 95\% Credible Interval (from MCMC): [0.51165877 0.86230178]
+
+Analytical Posterior (Beta(17, 7))
+Analytical Mean: 0.7083
+Analytical 95\% Credible Interval: (0.5159480295975618, 0.8678971203019001)
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_39_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{test_files/test_39_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Summary of Results:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Prior:} We defined it as Beta(2, 2). The plot shows its shape
+  centered at 0.5 but fairly broad.
+\item
+  \textbf{Likelihood:} Defined as Binomial(15 \textbar{} 20, \$
+  \theta \$ ). The plot (normalized) shows it peaks strongly around \$
+  \theta = 15/20 = 0.75 \$ , reflecting the data.
+\item
+  \textbf{Evidence:} Calculated analytically as \$ p(D\textbar M)
+  \approx 0.00289 \$ . This value tells us how likely the observed data
+  is under our chosen model (Binomial likelihood) and prior (Beta(2,2)),
+  averaged over all possible \$ \theta \$ .
+\item
+  \textbf{Posterior:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{MCMC:} We generated thousands of samples \$ \theta\_i \$
+    using Metropolis-Hastings. The histogram of these samples
+    approximates the posterior distribution \$ p(\theta \textbar{} D, M)
+    \$ . The MCMC mean and credible interval provide summaries.
+  \item
+    \textbf{Analytical:} Because of conjugacy, we know the true
+    posterior is Beta(17, 7). The plot shows the MCMC histogram closely
+    matches the analytical Beta(17, 7) curve, confirming the MCMC worked
+    correctly. The posterior mean is \$ 17 / (17+7) \approx 0.708 \$ ,
+    pulled slightly away from the raw data proportion (0.75) towards the
+    prior mean (0.5).
+  \end{itemize}
+\end{enumerate}
+
+This example shows how we calculate the prior and evidence (when
+possible) and how MCMC is used to generate samples that represent the
+posterior distribution, especially when the evidence and thus the
+posterior normalization constant are hard or impossible to compute
+directly.
+
+    \subsubsection{Note:}\label{note}
+
+We could calculate the evidence analytically here \emph{because} we
+chose a Beta prior and a Binomial likelihood (a conjugate pair). For
+most complex models, this integral is intractable, which is precisely
+why MCMC is needed for the posterior.
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{The Magic of Conjugate Pairs:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Definition:} A prior distribution \$ p(\theta\textbar M) \$
+    is called \emph{conjugate} to a likelihood function \$
+    p(D\textbar{}\theta, M) \$ if the resulting posterior distribution
+    \$ p(\theta\textbar D, M) \$ belongs to the \emph{same family} of
+    distributions as the prior.
+  \item
+    \textbf{Beta-Binomial Example:}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Prior: \$ p(\theta\textbar M) = \text{Beta}(\theta \textbar{}
+      \alpha, \beta) \propto \theta\^{}\{\alpha-1\}
+      (1-\theta)\^{}\{\beta-1\} \$
+    \item
+      Likelihood: \$ p(D\textbar{}\theta, M) = \text{Binomial}(n\_H
+      \textbar{} N, \theta) \propto \theta\^{}\{n\_H\}
+      (1-\theta)\^{}\{N-n\_H\} \$
+    \item
+      Posterior (unnormalized): \$ p(\theta\textbar D, M)
+      \propto p(D\textbar{}\theta, M) p(\theta\textbar M)
+      \propto \theta\^{}\{n\_H+\alpha-1\}
+      (1-\theta)\^{}\{N-n\_H+\beta-1\} \$
+    \end{itemize}
+  \item
+    \textbf{The Key Insight:} Notice that the mathematical \emph{form}
+    of the unnormalized posterior (\$
+    \theta\textsuperscript{\{\text{something}-1\}(1-\theta)}\{\text{something else}-1\}
+    \$ ) is exactly the form of a Beta distribution kernel. We instantly
+    recognize that the normalized posterior must be \$
+    \text{Beta}(\theta \textbar{} n\_H+\alpha, N-n\_H+\beta) \$ .
+  \end{itemize}
+\item
+  \textbf{How Conjugacy Simplifies the Evidence Integral:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The evidence is \$ p(D\textbar M) = \int p(D\textbar{}\theta, M)
+    p(\theta\textbar M) d\theta \$ .
+  \item
+    In the conjugate case, we know: \$ p(D\textbar{}\theta, M)
+    p(\theta\textbar M) = C
+    \times \text{PDF}\emph{\{\text{posterior}\}(\theta) \$ , where \$ C
+    \$ is some constant (the normalization constant we're trying to
+    find, which is the evidence!) and \$
+    \text{PDF}}\{\text{posterior}\}(\theta) \$ is the probability
+    density function of the known posterior distribution (e.g., Beta(\$
+    n\_H+\alpha, N-n\_H+\beta \$ )).
+  \item
+    So, \$ p(D\textbar M) = \int C
+    \times \text{PDF}\_\{\text{posterior}\}(\theta) d\theta \$ .
+  \item
+    Since the integral of any valid PDF over its entire domain is 1 (\$
+    \int \text{PDF}\_\{\text{posterior}\}(\theta) d\theta = 1 \$ ), we
+    get \$ p(D\textbar M) = C \$ .
+  \item
+    How do we find C? We calculated \$ p(D\textbar{}\theta, M)
+    p(\theta\textbar M) \$ explicitly: \$ p(D\textbar{}\theta, M)
+    p(\theta\textbar M) =
+    \left[ \binom{N}{n_H} \theta^{n_H} (1-\theta)^{N-n_H} \right] \left[ \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \theta^{\alpha-1} (1-\theta)^{\beta-1} \right] \$
+    \$ =
+    \left[ \binom{N}{n_H} \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \right] \times \left[ \theta^{n_H+\alpha-1} (1-\theta)^{N-n_H+\beta-1} \right] \$
+  \item
+    We also know the normalized posterior PDF is: \$
+    \text{Beta}(\theta \textbar{} n\_H+\alpha, N-n\_H+\beta) =
+    \frac{\Gamma(N+\alpha+\beta)}{\Gamma(n_H+\alpha)\Gamma(N-n_H+\beta)}
+    \theta\^{}\{n\_H+\alpha-1\} (1-\theta)\^{}\{N-n\_H+\beta-1\} \$
+  \item
+    By comparing the two expressions above, we can see that the constant
+    C (the evidence) must be: \$ C = p(D\textbar M) = \binom{N}{n_H}
+    \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+    \frac{\Gamma(n_H+\alpha)\Gamma(N-n_H+\beta)}{\Gamma(N+\alpha+\beta)}
+    \$ This matches the formula we derived earlier. The conjugacy
+    allowed us to use the known normalization constant of the resulting
+    posterior family to determine the value of the integral (the
+    evidence).
+  \end{itemize}
+\item
+  \textbf{Why Most Models Lead to Intractable Integrals:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Lack of Conjugacy:} Most combinations of priors and
+    likelihoods are \emph{not} conjugate pairs. When you multiply \$
+    p(D\textbar{}\theta, M) \$ and \$ p(\theta\textbar M) \$ , the
+    resulting function \$ \theta \$ doesn't simplify into the kernel of
+    a standard, well-known distribution.
+  \item
+    \textbf{Complex Likelihoods:} Real-world likelihood functions can be
+    very complex. They might involve output from computer simulations,
+    solutions to differential equations, hierarchical structures,
+    mixture models, etc. They often don't have simple, closed-form
+    mathematical expressions like the Binomial PDF.
+  \item
+    \textbf{Complex Priors:} We might want to use priors that reflect
+    complex prior knowledge, perhaps using non-parametric forms or
+    mixtures, which don't fit neat conjugate families.
+  \item
+    \textbf{High Dimensionality:} Most interesting problems involve
+    multiple parameters \$ \theta = (\theta\_1, \theta\_2, \ldots,
+    \theta\_d) \$ . The evidence calculation then becomes a
+    multi-dimensional integral: \$ p(D\textbar M) =
+    \int \dots \int p(D\textbar{}\theta\_1, \ldots, \theta\_d, M)
+    p(\theta\_1, \ldots, \theta\_d\textbar M) d\theta\_1
+    \dots d\theta\_d \$
+  \item
+    \textbf{Intractability Factors:}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textbf{No Analytical Solution:} For complex integrands (the
+      product of likelihood and prior), finding a symbolic
+      antiderivative is usually impossible.
+    \item
+      \textbf{Curse of Dimensionality:} Numerical integration methods
+      (like quadrature grids) become computationally infeasible very
+      quickly as the number of dimensions (\$ d \$ ) increases. The
+      number of points needed grows exponentially (\$ \sim k\^{}d \$ ).
+    \item
+      \textbf{Complex Geometry:} The posterior distribution might be
+      multi-modal (have multiple peaks), have strong correlations
+      between parameters (forming ridges), or have long tails, making it
+      difficult for simple numerical methods to explore and integrate
+      accurately.
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{MCMC to the Rescue:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MCMC methods (like Metropolis-Hastings) cleverly bypass the need to
+    calculate the evidence \$ p(D\textbar M) \$ .
+  \item
+    They only require the ability to evaluate something
+    \emph{proportional} to the posterior density, which is \$
+    p(D\textbar{}\theta, M) p(\theta\textbar M) \$ . We can usually
+    compute the likelihood and the prior for any given \$ \theta \$ , so
+    we can compute their product.
+  \item
+    MCMC algorithms generate a sequence of samples \$ \{\theta\_1,
+    \theta\_2, \ldots\} \$ such that the distribution of these samples
+    converges to the true posterior distribution \$ p(\theta\textbar D,
+    M) \$ .
+  \item
+    We get a representation of the posterior (the samples) without ever
+    calculating the normalization constant (the evidence).
+  \end{itemize}
+\end{enumerate}
+
+In essence, conjugate pairs are mathematically convenient exceptions.
+For the vast majority of realistic Bayesian models, the evidence
+integral is analytically and numerically intractable, making MCMC or
+other approximation techniques (like Variational Inference) essential
+tools for estimating the posterior distribution.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
